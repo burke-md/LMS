@@ -38,5 +38,16 @@ contract Token {
             emit Transfer(sender, recipient, amount);
             return true;
     }   
-}
 
+    function mint(uint256 amount) external {
+        balanceOf[msg.sender] += amount;
+        totalSupply += amount;
+        emit Transfer(address(0), msg.sender, amount);
+    }
+
+    function burn(uint256 amount) external {
+        balanceOf[msg.sender] -= amount;
+        totalSupply -= amount;
+        emit Transfer(msg.sender, address(0), amount);
+    }
+}
