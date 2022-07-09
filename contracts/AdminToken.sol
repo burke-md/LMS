@@ -5,6 +5,12 @@ contract Token {
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
 
+    modifier onlyAdmin() {
+        require(msg.sender === adminAddress, 
+                "Contract: This action is reserved for administrator.");
+        _;
+    }
+
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     //      owner => (spender => amount)
@@ -51,15 +57,17 @@ contract Token {
         emit Transfer(msg.sender, address(0), amount);
     }
 
-    function mintTokensToAddress(address recipient, uint256 amount) {
+    function mintTokensToAddress(address recipient, uint256 amount) 
+        external onlyAdmin {
 
     }
 
-    function reduceTokensAtAddress(address target) {
+    function reduceTokensAtAddress(address target) external onlyAdmin {
 
     }
 
-    function authoritiveTransferFrom(address from, address to) {
+    function authoritiveTransferFrom(address from, address to) 
+    external onlyAdmin {
 
     }
 }
