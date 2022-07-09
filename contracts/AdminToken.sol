@@ -20,7 +20,7 @@ contract Token {
     uint8 public decimals = 18;
 
     modifier onlyAdmin() {
-        require(msg.sender === adminAddress, 
+        require(msg.sender == adminAddress, 
                 "Contract: This action is reserved for administrator.");
         _;
     }
