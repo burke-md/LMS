@@ -20,7 +20,7 @@ contract Token {
         return true;
     }
     
-    function approve(address spender, uint256 amount) externals returns (bool) {
+    function approve(address spender, uint256 amount) external returns (bool) {
         allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
         return true;
