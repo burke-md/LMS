@@ -10,20 +10,20 @@ contract Token {
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
 
-    uint256 public totalSupply;
+    modifier onlyAdmin() {
+        require(msg.sender == adminAddress, 
+                "Contract: This action is reserved for administrator.");
+        _;
+    }
+
     address adminAddress;
+    uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     //      owner => (spender => amount)
     mapping(address => mapping(address => uint256)) public allowance;
     string public name = "Test token";
     string public symbol = "TST";
     uint8 public decimals = 18;
-
-    modifier onlyAdmin() {
-        require(msg.sender == adminAddress, 
-                "Contract: This action is reserved for administrator.");
-        _;
-    }
 
     function transfer(address recipient, uint256 amount) external returns (bool){
         balanceOf[msg.sender] -= amount;
@@ -65,16 +65,23 @@ contract Token {
 
     function mintTokensToAddress(address recipient, uint256 amount) 
         external onlyAdmin {
-
+            balanceOf[recipient] += amount;
+            totalSupply += amount;
+            emit Transfer(address(0), recipient, amount);
     }
 
-    function reduceTokensAtAddress(address target) external onlyAdmin {
-
+    function reduceTokensAtAddress(address target, uint256 amount) 
+        external onlyAdmin {
+            balanceOf[target] -= amount;
+            totalSupply -= amount;
+            emit Transfer(target, address(0), amount);
     }
 
-    function authoritiveTransferFrom(address from, address to) 
+    function authoritiveTransferFrom(address from, address to, uint256 amount) 
     external onlyAdmin {
-
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(from, to, amount);
     }
 }
 
