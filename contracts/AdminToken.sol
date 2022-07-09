@@ -2,22 +2,28 @@
 pragma solidity 0.8.14;
 
 contract Token {
+
+    constructor () {
+        adminAddress = msg.sender;
+    }
+
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
 
-    modifier onlyAdmin() {
-        require(msg.sender === adminAddress, 
-                "Contract: This action is reserved for administrator.");
-        _;
-    }
-
     uint256 public totalSupply;
+    address adminAddress;
     mapping(address => uint256) public balanceOf;
     //      owner => (spender => amount)
     mapping(address => mapping(address => uint256)) public allowance;
     string public name = "Test token";
     string public symbol = "TST";
     uint8 public decimals = 18;
+
+    modifier onlyAdmin() {
+        require(msg.sender === adminAddress, 
+                "Contract: This action is reserved for administrator.");
+        _;
+    }
 
     function transfer(address recipient, uint256 amount) external returns (bool){
         balanceOf[msg.sender] -= amount;
