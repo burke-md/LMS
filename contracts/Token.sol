@@ -34,7 +34,7 @@ contract Token {
             // at all.
 
             balanceOf[sender] -= amount;
-            balanceOf[recipient] += amout;
+            balanceOf[recipient] += amount;
             emit Transfer(sender, recipient, amount);
             return true;
     }   
