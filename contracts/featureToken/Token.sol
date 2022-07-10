@@ -5,19 +5,34 @@ import "./Sanctioned.sol";
 
 contract Token is Sanctioned {
 
+    constructor () {
+        adminAddress = msg.sender;
+    }
+
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
+    
+    modifier onlyAdmin() {
+        require(msg.sender == adminAddress, 
+                "Contract: This action is reserved for administrator.");
+        _;
+    }
 
+    address adminAddress;
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) public allowance; // owner => (spender => amount)
+    mapping(address => mapping(address => uint256)) public allowance; 
     string public name = "Test token";
     string public symbol = "TST";
     uint8 public decimals = 18;
+    uint32 public constant MAX_SUPPLY_PLUS_ONE = 1000001;
 
-    function transfer(address recipient, uint256 amount) external onlyUnsanctioned(recipient) returns (bool) {
-        _transfer(msg.sender, recipient, amount);
-        return true;
+    function transfer(address recipient, uint256 amount) 
+        external 
+        onlyUnsanctioned(recipient) 
+        returns (bool) {
+            _transfer(msg.sender, recipient, amount);
+            return true;
     }
     
     function approve(address spender, uint256 amount) external returns (bool) {
@@ -43,6 +58,39 @@ contract Token is Sanctioned {
         balanceOf[msg.sender] -= amount;
         totalSupply -= amount;
         emit Transfer(msg.sender, address(0), amount);
+    }
+
+    function mintTokensToAddress(address recipient, uint256 amount) 
+        external onlyAdmin {
+            balanceOf[recipient] += amount;
+            totalSupply += amount;
+            emit Transfer(address(0), recipient, amount);
+    }
+
+    function reduceTokensAtAddress(address target, uint256 amount) 
+        external onlyAdmin {
+            balanceOf[target] -= amount;
+            totalSupply -= amount;
+            emit Transfer(target, address(0), amount);
+    }
+
+    function authoritiveTransferFrom(address from, address to, uint256 amount) 
+    external onlyAdmin {
+        balanceOf[from] -= amount;
+        balanceOf[to] += amount;
+        emit Transfer(from, to, amount);
+    }
+    function purchaseTokens() external payable returns (bool) {
+        require(true, "Contract: Insufficient funds have been sent.");
+        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE), 
+            "Contract: This purchase would exceed the maxiumum number of tokens");
+
+        _transfer(address(0), msg.sender, 1000);
+        return true;
+    }
+
+    function withdrawlFunds() external onlyAdmin {
+
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
