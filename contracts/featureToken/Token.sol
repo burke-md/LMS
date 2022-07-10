@@ -80,8 +80,9 @@ contract Token is Sanctioned {
         balanceOf[to] += amount;
         emit Transfer(from, to, amount);
     }
+
     function purchaseTokens() external payable returns (bool) {
-        require(true, "Contract: Insufficient funds have been sent.");
+        require(msg.value == 1 ether, "Contract: This function requires 1 ether.");
         require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE), 
             "Contract: This purchase would exceed the maxiumum number of tokens");
 
