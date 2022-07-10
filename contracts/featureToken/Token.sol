@@ -31,6 +31,8 @@ contract Token is Sanctioned {
         external 
         onlyUnsanctioned(recipient) 
         returns (bool) {
+            require(from != address(0));
+            require(to != address(0));
             _transfer(msg.sender, recipient, amount);
             return true;
     }
@@ -75,10 +77,8 @@ contract Token is Sanctioned {
     }
 
     function authoritiveTransferFrom(address from, address to, uint256 amount) 
-    external onlyAdmin {
-        balanceOf[from] -= amount;
-        balanceOf[to] += amount;
-        emit Transfer(from, to, amount);
+        external onlyAdmin {
+            _transfer(from, to, amount);  
     }
 
     function purchaseTokens() external payable returns (bool) {
@@ -86,7 +86,8 @@ contract Token is Sanctioned {
         require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE), 
             "Contract: This purchase would exceed the maxiumum number of tokens");
 
-        _transfer(address(0), msg.sender, 1000);
+        balanceOf[msg.sender] += 1000;
+        totalSupply += 1000;
         return true;
     }
 
@@ -95,9 +96,6 @@ contract Token is Sanctioned {
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
-        require(from != address(0));
-        require(to != address(0));
-
         balanceOf[from] -= amount;
         balanceOf[to] += amount;
         emit Transfer(from, to, amount);
