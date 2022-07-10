@@ -16,8 +16,7 @@ contract Token is Sanctioned {
     uint8 public decimals = 18;
 
     function transfer(address recipient, uint256 amount) external onlyUnsanctioned(recipient) returns (bool) {
-        _transfer(recipient, msg.sender, amount);
-        emit Transfer(msg.sender, recipient, amount);
+        _transfer(msg.sender, recipient, amount);
         return true;
     }
     
@@ -30,9 +29,7 @@ contract Token is Sanctioned {
     function transerFrom(address sender, address recipient, uint256 amount) 
         external returns (bool) {
             allowance[sender][msg.sender] -= amount; 
-            balanceOf[sender] -= amount;
-            balanceOf[recipient] += amount;
-            emit Transfer(sender, recipient, amount);
+            _transfer(sender, recipient, amount); 
             return true;
     }   
 
@@ -48,7 +45,7 @@ contract Token is Sanctioned {
         emit Transfer(msg.sender, address(0), amount);
     }
 
-    function _transfer(address to, address from, uint256 amount) internal {
+    function _transfer(address from, address to, uint256 amount) internal {
         require(from != address(0));
         require(to != address(0));
 
