@@ -1,13 +1,11 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.14;
-
-import "./Sanctioned.sol";
+pragma solidity 0.8.15;
 
 contract Token is Sanctioned {
 
     constructor () {
         adminAddress = msg.sender;
-    }
+    }   
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
@@ -18,14 +16,34 @@ contract Token is Sanctioned {
         _;
     }
 
+    /** @dev The onlyUnsanctioned modifier can be applied to any function within a contract that has 
+    *        imported this file. The modifier will revert any function if either the function caller or 
+    *        intended recierver has been added to the sanctioned mapping.
+    */
+
+    modifier onlyUnsanctioned(address recipient) {
+        require(sanctioned[msg.sender] == false, "Contract: You are not allowed to send tokens.");
+        require(sanctioned[recipient] == false, "Contract: The recipient cannot recieve tokens.");
+        _;
+    }
+
     address adminAddress;
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance; 
+    mapping(address => bool) public sanctioned;
     string public name = "Test token";
     string public symbol = "TST";
     uint8 public decimals = 18;
     uint32 public constant MAX_SUPPLY_PLUS_ONE = 1000001;
+
+     /** @dev The toggelAccountSanction function acts as a 'setter' to toggle the boolean value associated with
+    *        the sanctioned mapping and a given address.
+    */
+
+    function toggleAccountSanction(address _account) external {
+        sanctioned[_account] = !sanctioned[_account];
+    }
 
     function transfer(address recipient, uint256 amount) 
         external 
