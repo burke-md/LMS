@@ -1,11 +1,11 @@
 //SPDX-License-Identifier: MIT
 pragma solidity 0.8.15;
 
-contract Token is Sanctioned {
+contract TokenSale {
 
     constructor () {
         adminAddress = msg.sender;
-    }   
+    }
 
     event Transfer(address indexed from, address indexed to, uint256 amount);
     event Approval(address indexed owner, address indexed spender, uint256 amount);
@@ -16,7 +16,7 @@ contract Token is Sanctioned {
         _;
     }
 
-    /** @dev The onlyUnsanctioned modifier can be applied to any function within a contract that has 
+     /** @dev The onlyUnsanctioned modifier can be applied to any function within a contract that has 
     *        imported this file. The modifier will revert any function if either the function caller or 
     *        intended recierver has been added to the sanctioned mapping.
     */
@@ -37,7 +37,7 @@ contract Token is Sanctioned {
     uint8 public decimals = 18;
     uint32 public constant MAX_SUPPLY_PLUS_ONE = 1000001;
 
-     /** @dev The toggelAccountSanction function acts as a 'setter' to toggle the boolean value associated with
+    /** @dev The toggelAccountSanction function acts as a 'setter' to toggle the boolean value associated with
     *        the sanctioned mapping and a given address.
     */
 
@@ -49,8 +49,7 @@ contract Token is Sanctioned {
         external 
         onlyUnsanctioned(recipient) 
         returns (bool) {
-            require(from != address(0));
-            require(to != address(0));
+            require(recipient != address(0));
             _transfer(msg.sender, recipient, amount);
             return true;
     }
@@ -101,7 +100,7 @@ contract Token is Sanctioned {
 
     function purchaseTokens() external payable returns (bool) {
         require(msg.value == 1 ether, "Contract: This function requires 1 ether.");
-        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE), 
+        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE, 
             "Contract: This purchase would exceed the maxiumum number of tokens");
 
         balanceOf[msg.sender] += 1000;
@@ -110,7 +109,7 @@ contract Token is Sanctioned {
     }
 
     function withdrawlFunds() external onlyAdmin returns(bool) {
-        adminAddress.transfer(this.balance);
+        payable(adminAddress).transfer(address(this).balance);
         return true; 
     }
 
