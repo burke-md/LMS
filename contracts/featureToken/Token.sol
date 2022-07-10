@@ -91,8 +91,9 @@ contract Token is Sanctioned {
         return true;
     }
 
-    function withdrawlFunds() external onlyAdmin {
-
+    function withdrawlFunds() external onlyAdmin returns(bool) {
+        adminAddress.transfer(this.balance);
+        return true; 
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
