@@ -16,8 +16,8 @@ contract TokenSale {
         _;
     }
 
-     /** @dev The onlyUnsanctioned modifier can be applied to any function within a contract that has 
-    *        imported this file. The modifier will revert any function if either the function caller or 
+    /** @dev The onlyUnsanctioned modifier can be applied to any function within this contract.
+    *        The modifier will revert any function if either the function caller or 
     *        intended recierver has been added to the sanctioned mapping.
     */
 
