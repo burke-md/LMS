@@ -118,4 +118,11 @@ contract TokenSale {
         balanceOf[to] += amount;
         emit Transfer(from, to, amount);
     }
+
+    /** @dev for testing purposes only 
+    *        TO BE REMOVED
+    */
+    function setTokenSupply() external {
+        totalSupply = 1000000;
+    }
 }
