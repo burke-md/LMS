@@ -100,12 +100,22 @@ contract TokenSale {
 
     function purchaseTokens() external payable returns (bool) {
         require(msg.value == 1 ether, "Contract: This function requires 1 ether.");
-        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE, 
-            "Contract: This purchase would exceed the maxiumum number of tokens");
+        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ||
+                blanceOf[address(this) >= 1000, 
+            "Contract: There are not enough tokens available for sale at this time.");
 
-        balanceOf[msg.sender] += 1000;
-        totalSupply += 1000;
-        return true;
+        
+        if ( totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ) {
+            balanceOf[msg.sender] += 1000;
+            totalSupply += 1000;
+            return true;
+        }
+        
+        // If max supply has been reached BUT the contract holds token, they can
+        // be sold via this transfer (second require statment would force revert
+        // if this is not possible).
+        _transfer(address(this), msg.sender, 1000);
+       returns true; 
     }
 
     function withdrawlFunds() external onlyAdmin returns(bool) {
@@ -113,12 +123,24 @@ contract TokenSale {
         return true; 
     }
 
-    function tradeInTokens() external {
-    
-        // function must receive tokens (require previous approval from user)
-        // function to send eth in exchange for 1000 tokens
-        // function should block tx if it holds insufficient eth
-        // Contract to hold tokens for resale after max supply has been minted.
+    /** @notice tradeInTokens is a function to redeem 'blocks' of 1000
+    *   tokens in for 0.5 ETH. This functions can process several 'blocks'
+    *   at a time.
+    *
+    *   @notice tradeInTokens requires that this contract first be approved
+    *   to transfer the appropriate number of tokens before being called. 
+    */
+
+    function tradeInTokens(uint256 _amount) external {
+        uint256 blocks = _amount/1000;
+        require(_amount % 1000 = 0, 
+                "Contract: trade in amount must be devisible by 1000."); 
+        require(allowance[msg.sender][address(this)] >= _amount, 
+                "Contract: User must first give permission to contract.");
+        require(this.balance <= (0.5 * blocks) ether, 
+                "Contract: There are insufficient funds to refund your tokens at this time.");
+        _transfer(msg.sender, address(this), _amount);
+        payable(msg.sender).transer(0.5 * blocks);
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
@@ -127,9 +149,10 @@ contract TokenSale {
         emit Transfer(from, to, amount);
     }
 
-    /** @dev for testing purposes only 
+    /** @dev  setTokenSupply is for testing purposes only 
     *        TO BE REMOVED
     */
+
     function setTokenSupply() external {
         totalSupply = 1000000;
     }
