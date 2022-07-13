@@ -137,10 +137,10 @@ contract TokenSale {
                 "Contract: trade in amount must be devisible by 1000."); 
         require(allowance[msg.sender][address(this)] >= _amount, 
                 "Contract: User must first give permission to contract.");
-        require(address(this).balance <= 0.5 * blocks, 
+        require(address(this).balance <= 500000000000000000 * blocks, 
                 "Contract: There are insufficient funds to refund your tokens at this time.");
         _transfer(msg.sender, address(this), _amount);
-        payable(msg.sender).transfer(0.5 * blocks);
+        payable(msg.sender).transfer(500000000000000000 * blocks);
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
