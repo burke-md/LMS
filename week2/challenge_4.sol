@@ -100,12 +100,10 @@ contract TokenSale {
 
     function purchaseTokens() external payable returns (bool) {
         require(msg.value == 1 ether, "Contract: This function requires 1 ether.");
-        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ||
-                balanceOf[address(this)] >= 1000 ether, 
+        require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE || balanceOf[address(this)] >= 1000, 
             "Contract: There are not enough tokens available for sale at this time.");
-
         
-        if ( totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ) {
+        if (totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ) {
             balanceOf[msg.sender] += 1000;
             totalSupply += 1000;
             return true;
@@ -137,7 +135,7 @@ contract TokenSale {
                 "Contract: trade in amount must be devisible by 1000."); 
         require(allowance[msg.sender][address(this)] >= _amount, 
                 "Contract: User must first give permission to contract.");
-        require(address(this).balance >= 500000000000000000 * blocks, 
+        require(address(this).balance >=  500000000000000000 * blocks, 
                 "Contract: There are insufficient funds to refund your tokens at this time.");
         _transfer(msg.sender, address(this), _amount);
         payable(msg.sender).transfer(500000000000000000 * blocks);
@@ -155,5 +153,9 @@ contract TokenSale {
 
     function setTokenSupply() external {
         totalSupply = 1000000;
+    }
+
+    function getContractBalance() external view returns(uint256) {
+        return address(this).balance;
     }
 }
