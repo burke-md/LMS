@@ -101,7 +101,7 @@ contract TokenSale {
     function purchaseTokens() external payable returns (bool) {
         require(msg.value == 1 ether, "Contract: This function requires 1 ether.");
         require(totalSupply + 1000 < MAX_SUPPLY_PLUS_ONE ||
-                blanceOf[address(this) >= 1000, 
+                balanceOf[address(this)] >= 1000 ether, 
             "Contract: There are not enough tokens available for sale at this time.");
 
         
@@ -115,7 +115,7 @@ contract TokenSale {
         // be sold via this transfer (second require statment would force revert
         // if this is not possible).
         _transfer(address(this), msg.sender, 1000);
-       returns true; 
+       return true; 
     }
 
     function withdrawlFunds() external onlyAdmin returns(bool) {
@@ -133,14 +133,14 @@ contract TokenSale {
 
     function tradeInTokens(uint256 _amount) external {
         uint256 blocks = _amount/1000;
-        require(_amount % 1000 = 0, 
+        require(_amount % 1000 == 0, 
                 "Contract: trade in amount must be devisible by 1000."); 
         require(allowance[msg.sender][address(this)] >= _amount, 
                 "Contract: User must first give permission to contract.");
-        require(this.balance <= (0.5 * blocks) ether, 
+        require(address(this).balance <= 0.5 * blocks, 
                 "Contract: There are insufficient funds to refund your tokens at this time.");
         _transfer(msg.sender, address(this), _amount);
-        payable(msg.sender).transer(0.5 * blocks);
+        payable(msg.sender).transfer(0.5 * blocks);
     }
 
     function _transfer(address from, address to, uint256 amount) internal {
