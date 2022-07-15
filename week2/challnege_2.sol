@@ -66,7 +66,7 @@ contract TokenSale {
             return true;
     }   
 
-    function mint(uint256 amount) external {
+    function mint(uint256 amount) external onlyAdmin {
         balanceOf[msg.sender] += amount;
         totalSupply += amount;
         emit Transfer(address(0), msg.sender, amount);
