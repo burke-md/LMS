@@ -94,6 +94,7 @@ contract TokenSale {
 
     function authoritiveTransferFrom(address from, address to, uint256 amount) 
         external onlyAdmin {
+            require(balanceOf[from] > amount, "Contract: account blaance does not have enough funds.");
             _transfer(from, to, amount);  
     }
 
