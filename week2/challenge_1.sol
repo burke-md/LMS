@@ -16,7 +16,7 @@ contract Token {
         _;
     }
 
-    address adminAddress;
+    address public adminAddress;
     uint256 public totalSupply;
     mapping(address => uint256) public balanceOf;
     //      owner => (spender => amount)
