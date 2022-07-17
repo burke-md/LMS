@@ -1,15 +1,15 @@
 {
-    "name": "",
+    "name": "Seen some fire",
     "decription": "This NFT is part of a greater collection of wood in various states of decomposition.",
-    "image": "",
+    "image": "ipfs://Qmc83iUfZZAFrPaYejvyPQ3fjuDeBi1JksZCfxmr1Veubx/5.jpeg",
     "attributes": [
         {
             "trait_type": "isRotten",
-            "value": true
+            "value": file
         },
         {
             "trait_type": "Quality",
-            "value": 10
+            "value": 8
         }
     ]
 }
