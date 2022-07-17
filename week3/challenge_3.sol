@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract MyToken is ERC721, ERC721URIStorage {
     constructor() ERC721("rottenPlank", "RTP") {}
 
-    string private _baseUri = "ipfs://Qm/";
+    string private _baseUri = "ipfs://QmU35GLsE3JPwEhwL7usHE754XAxg3WMqzvWGDrmBbf2YR/";
     uint256 private nextIdToMint = 10;
 
     function mint() external {
@@ -15,7 +15,7 @@ contract MyToken is ERC721, ERC721URIStorage {
         require(tokenId > 0);
          _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, _baseUri);
-        nextIdToMint --;
+        nextIdToMint--;
     }
 
 //----------------------------------------------------------------------------\\
