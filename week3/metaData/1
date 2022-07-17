@@ -1,0 +1,16 @@
+{
+    "name": "",
+    "decription": "This NFT is part of a greater collection of wood in various states of decomposition.",
+    "image": "",
+    "attributes": [
+        {
+            "trait_type": "isRotten",
+            "value": true
+        },
+        {
+            "trait_type": "Quality",
+            "value": 10
+        }
+    ]
+}
+
