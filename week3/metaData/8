@@ -1,7 +1,7 @@
 {
-    "name": "The old deck",
+    "name": "",
     "decription": "This NFT is part of a greater collection of wood in various states of decomposition.",
-    "image": "ipfs://Qmc83iUfZZAFrPaYejvyPQ3fjuDeBi1JksZCfxmr1Veubx/1.jpeg",
+    "image": "",
     "attributes": [
         {
             "trait_type": "isRotten",
@@ -9,7 +9,7 @@
         },
         {
             "trait_type": "Quality",
-            "value": 5
+            "value": 10
         }
     ]
 }
