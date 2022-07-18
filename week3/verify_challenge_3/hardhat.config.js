@@ -1,5 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 require("@nomiclabs/hardhat-etherscan");
+require('@nomiclabs/hardhat-ethers');
 
 require('dotenv').config();
 
@@ -16,8 +17,14 @@ module.exports = {
        url: `https://eth-rinkeby.alchemyapi.io/v2/${alchemyApiKey}`,
        accounts: { mnemonic: mnemonic },
      },
-   },
-   etherscan: {
+  },
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 10000,
+    },
+  },
+  etherscan: {
     apiKey: "etherScanAPI"
   }
 };
