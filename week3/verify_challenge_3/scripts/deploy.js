@@ -1,3 +1,5 @@
+const { ethers } = require("hardhat");
+
 async function main () {
   const Test = await ethers.getContractFactory('test721');
   console.log('Deploying test721...');
