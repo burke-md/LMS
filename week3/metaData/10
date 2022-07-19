@@ -1,11 +1,11 @@
 {
-  "name": "Good ol flat heads",
-  "description": "This NFT is part of a greater collection of wood in various states of decomposition.",
-  "image": "ipfs://Qmc83iUfZZAFrPaYejvyPQ3fjuDeBi1JksZCfxmr1Veubx/10.jpeg",
-  "attributes": [
-    {
-        "trait_type": "Quality",
-        "value": 9
-    }
-  ],
+    "name": "Good 'ol flat heads",
+    "description": "This NFT is part of a greater collection of wood in various states of decomposition.",
+    "image": "https://gateway.pinata.cloud/ipfs/Qmc83iUfZZAFrPaYejvyPQ3fjuDeBi1JksZCfxmr1Veubx/10.jpeg",
+    "attributes": [
+        {
+            "trait_type": "Quality",
+            "value": 9
+        }
+    ]
 }
