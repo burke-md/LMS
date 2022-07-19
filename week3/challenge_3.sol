@@ -5,10 +5,13 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
 contract MyToken is ERC721, ERC721URIStorage {
-    constructor() ERC721("rottenPlank", "RTP") {}
+    constructor() ERC721("rottenPlank", "RTP") {
+        adminAddress = msg.sender; 
+    }
 
-    string private _baseUri = "ipfs://QmU35GLsE3JPwEhwL7usHE754XAxg3WMqzvWGDrmBbf2YR/";
+    string private _baseUri = "ipfs://QmRiGbdFztn1KGLezBF76C2iqDJG4Rg4ZDs5wBEeRCP3z3/";
     uint256 private nextIdToMint = 10;
+    address private adminAddress;
 
     function mint() external {
         uint256 tokenId = nextIdToMint;
@@ -16,6 +19,10 @@ contract MyToken is ERC721, ERC721URIStorage {
          _safeMint(msg.sender, tokenId);
         _setTokenURI(tokenId, _baseUri);
         nextIdToMint--;
+    }
+
+    function setMetaData(string memory _uri) external onlyAdmin {
+        _baseUri = _uri;
     }
 
 //----------------------------------------------------------------------------\\
@@ -58,5 +65,13 @@ contract MyToken is ERC721, ERC721URIStorage {
             _int /= 10;
         }
         return string(bstr);
+    }
+//----------------------------------------------------------------------------\\
+//---------------------------------Access-------------------------------------\\
+
+    modifier onlyAdmin() {
+        require(msg.sender == adminAddress, 
+            "Contract: This function is only available to the contract admin.");
+        _;
     }
 }
