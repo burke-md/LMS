@@ -1,12 +1,8 @@
 {
     "name": "Good look'n roof",
-    "decription": "This NFT is part of a greater collection of wood in various states of decomposition.",
+    "description": "This NFT is part of a greater collection of wood in various states of decomposition.",
     "image": "ipfs://Qmc83iUfZZAFrPaYejvyPQ3fjuDeBi1JksZCfxmr1Veubx/7.jpeg",
     "attributes": [
-        {
-            "trait_type": "isRotten",
-            "value": false  
-        },
         {
             "trait_type": "Quality",
             "value": 9

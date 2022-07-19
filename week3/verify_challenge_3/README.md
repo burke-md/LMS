@@ -1,3 +1,12 @@
 # Verify challenge 3
 
-Test deployed to: 0xd4b3530e0AF8dE93E5116D637a2Ceb4591b1dDC1
+
+## Steps followed:
+
+- Compile `npx hardhat compile`
+
+- Depoy `npx hardhat run --network rinkeby ./scripts/deploy.js`
+
+- Verify `npx hardhat verify --network rinkeby 0xD6e6f49FFC5f56E6810De64ae7B040089Dd92a7b`
+
+Test deployed to: 0xD6e6f49FFC5f56E6810De64ae7B040089Dd92a7b
