@@ -11,18 +11,20 @@ const mnemonic = process.env.MNEMONIC;
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-  solidity: "0.8.15",
+  solidity: {
+      version: "0.8.15",
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 10000,
+        },
+      },
+    },
   networks: {
      rinkeby: {
        url: `https://eth-rinkeby.alchemyapi.io/v2/${alchemyApiKey}`,
        accounts: { mnemonic: mnemonic },
      },
-  },
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 10000,
-    },
   },
   etherscan: {
     apiKey: "etherScanAPI"
