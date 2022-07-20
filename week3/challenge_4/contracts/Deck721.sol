@@ -1,6 +1,6 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT 
 
-pragma solidity 0.8.15;
+pragma solidity 0.8.15; 
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
@@ -12,7 +12,7 @@ contract Deck20 is ERC721 {
     }
 
     address immutable adminAddress;
-    address constant erc20Address = "";
+    address private DECK_ERC20_ADDRESS  = "";
     uint256 private nextIdToMint = 10;
 
     function mint() external payable {
@@ -27,6 +27,12 @@ contract Deck20 is ERC721 {
 
     function _baseURI() internal pure override returns (string memory) {
         return "ipfs://Qm/";
+    }
+
+    function setERC20TokenAddress(address _address) external {
+        require(msg.sender == adminAddress, 
+                "Contract: This function is only available for the deployer.");
+        DECK_ERC20_ADDRESS = _address;
     }
 }
 
