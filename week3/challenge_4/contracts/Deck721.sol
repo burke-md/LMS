@@ -3,6 +3,7 @@
 pragma solidity 0.8.15; 
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract Deck20 is ERC721 {
 
@@ -12,14 +13,25 @@ contract Deck20 is ERC721 {
     }
 
     address immutable adminAddress;
-    address private DECK_ERC20_ADDRESS  = "";
+    address private DECK_ERC20_ADDRESS;
     uint256 private nextIdToMint = 10;
+
+    /** The mint function is restricted to a maximum on 10 unique NFT's.
+    *
+    *   However, It requires the transfer of 10 rottenPlank ERC20 tokens.
+    *
+    *   Question - Does user need to approve 721 contract to make this tx?
+    * 
+    */
 
     function mint() external payable {
         uint256 currentIdIndex = nextIdToMint;
         require(currentIdIndex > 0, 
                 "Contract: Minting would exceed max supply.");
-        // handle erc20 payable
+
+        IERC20(
+            DECK_ERC20_ADDRESS).transferFrom(msg.sender, address(this), 10*1e18);
+
         _mint(msg.sender, currentIdIndex);
         nextIdToMint--;
 
