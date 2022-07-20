@@ -38,7 +38,10 @@ contract Deck20 is ERC20 {
         require(msg.sender == adminAddress, 
                 "Contract: This function is only available to the deployer.");
 
-        payable(adminAddress).transfer();
+        require(_amount <= address(this).balance,
+                "Contract: Cannot withdrawl more than the contract holds.");
+
+        payable(adminAddress).transfer(_amount);
     }
 
     receive() external payable {
