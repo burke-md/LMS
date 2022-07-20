@@ -2,6 +2,7 @@
 pragma solidity 0.8.15;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 contract DeckStaking is IERC721Receiver {
     constructor(address _erc20Token, address _erc721Token) {
@@ -50,17 +51,18 @@ contract DeckStaking is IERC721Receiver {
         }
 
         // user needs to allow transfer form this contract address
-        DECK_721_TOKEN.safeTransferFrom(msg.sender, address(this), _tokenId);
+        //Check ownership?? or will lack of ownership force reversion?
+        IERC721(DECK_721_TOKEN).safeTransferFrom(msg.sender, address(this), _tokenId);
         //Note original owner, time stamp of stake
         stakes[_tokenId] = StakedToken(msg.sender, block.timestamp);
-        //Check ownership?? or will lack of ownership force reversion?
-
-
     }
     
     //User must be able to reclaim NFT 
-    function unstake() external {
+    function unstake(uint256 _tokenId) external {
     //Make check to ensure only original owner can unstake
+        require(stakes[_tokenId].owner = msg.sender,
+                "Contract: Only a token's owner can unstake.");
+
     }
 
     /** Create func for users to withdrawl stake rewards 
