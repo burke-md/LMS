@@ -5,7 +5,17 @@ pragma solidity 0.8.15;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Deck20 is ERC20 {
-    constructor() ERC20("rottenPlank", "RTP") {}
+    constructor() ERC20("rottenPlank", "RTP") {
+        adminAddress = msg.sender; 
+    }
+
+    address adminAddress;
+
+    modifier onlyAdmin() {
+        require(msg.sender == adminAddress, 
+                "Contract: This function is only available to the deployer.");
+        _;
+    }
     
     function purchaseTokens(uint256 _amount) external payable {
 
