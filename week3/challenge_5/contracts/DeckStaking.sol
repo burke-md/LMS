@@ -60,7 +60,7 @@ contract DeckStaking is IERC721Receiver {
     //User must be able to reclaim NFT 
     function unstake(uint256 _tokenId) external {
     //Make check to ensure only original owner can unstake
-        require(stakes[_tokenId].owner = msg.sender,
+        require(stakes[_tokenId].owner == msg.sender,
                 "Contract: Only a token's owner can unstake.");
 
     }
