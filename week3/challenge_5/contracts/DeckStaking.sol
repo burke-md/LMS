@@ -3,13 +3,22 @@ pragma solidity 0.8.15;
 
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract DeckStaking is IERC721Receiver {
     constructor(address _erc20Token, address _erc721Token) {
         DECK_20_TOKEN = _erc20Token;
         DECK_721_TOKEN = _erc721Token;
+        adminAdress = msg.sender;
     }
 
+    modifier onlyAdmin() {
+        require(msg.sender == adminAdress,
+                "Contract: This function is only available to contract admin.");
+        _;
+    }
+
+    address public adminAdress;
     address public immutable DECK_20_TOKEN;
     address public immutable DECK_721_TOKEN;
     uint256 public timeToReward = 10; //check date formating
@@ -17,7 +26,8 @@ contract DeckStaking is IERC721Receiver {
     //Create struct to store staking data
     struct StakedToken {
         address owner;
-        uint256 timeStamp;
+        uint256 originStakeTime;
+        uint256 lastWithdrawl;
     }
     //Create mapping to store stake struct
     mapping(uint256 => StakedToken) private stakes;//tokenId => struct
@@ -46,15 +56,17 @@ contract DeckStaking is IERC721Receiver {
     *
     */ 
 
-        if (stakes[_tokenId].timeStamp + timeToReward < block.timestamp) {
+        if (stakes[_tokenId].lastWithdrawl + timeToReward < block.timestamp) {
             revert("Contract: This token has recently been staked. Please try later!");
         }
 
         // user needs to allow transfer form this contract address
         //Check ownership?? or will lack of ownership force reversion?
         IERC721(DECK_721_TOKEN).safeTransferFrom(msg.sender, address(this), _tokenId);
-        //Note original owner, time stamp of stake
-        stakes[_tokenId] = StakedToken(msg.sender, block.timestamp);
+
+         //Owner, time of stake, last withdrawl (set to time of stake, updated as 
+         //token rewards are withdrawn.
+        stakes[_tokenId] = StakedToken(msg.sender, block.timestamp, block.timestamp);
     }
     
     //User must be able to reclaim NFT 
@@ -63,17 +75,31 @@ contract DeckStaking is IERC721Receiver {
         require(stakes[_tokenId].owner == msg.sender,
                 "Contract: Only a token's owner can unstake.");
 
+        IERC721(DECK_721_TOKEN).safeTransferFrom(address(this), msg.sender, _tokenId);
+        
+        //Emit unstake event
+
     }
 
     /** Create func for users to withdrawl stake rewards 
     *   (see pull over push pattern)
     */
 
-    function withdrawlRewards() external {
-        //Should the staking contract be loaded with ERC20 tokens?
-        //Other wise staking contract would need special privledge to transfer.
+    function withdrawlRewards(uint256 _tokenId) external {
+        // (Current time - time of stake) / how long for rewards 
+        require((block.timestamp - stakes[_tokenId].lastWithdrawl) > timeToReward,
+                    "Contract: Enough time has not passed, to collect reward.");
+        
+        stakes[_tokenId].lastWithdrawl = block.timestamp;
 
-        //Should a check be made at time of staking for how many days could be
-        //paid out?
+        IERC20(DECK_20_TOKEN).transferFrom(address(this), msg.sender, 10e18);
+    }
+
+    /** @notice Users may want to check that this contract has access to reward
+    *   tokens, before staking.
+    */
+    function hasRewardTokens() external view returns (uint256) {
+        uint256 _balance = IERC20(DECK_20_TOKEN).balanceOf(address(this));
+        return _balance;
     }
 }
