@@ -14,7 +14,10 @@ async function main() {
 
     return data;
     */
-    return result.baseFeePerGas.toString();
+    return {
+        blockNumber: result.number, 
+        baseFee: Number(result.baseFeePerGas.toString())
+    }
 };
 
 
