@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 const data = {
-    labels: ['1', '2', '3'],
+    labels: [],
     datasets: [
         {
             label: "Chart1",
@@ -42,19 +42,23 @@ const data = {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [10, 20, 30]
+            data: []
         }
     ]
 };
 
 export default function LineChart() {
+    const dataArray = [10, 10, 10];
+    const labelsArray = ['1', '2', '3'];
+    const currentData = {...data};
     return (
         <>
             <h2> Chart ex </h2>
             <Line 
-                data={data}
-                width={400}
-                height={400}
+                data={currentData}
+                width="2000px"
+                height="2000px"
+                options={{ maintainAspectRatio: false }}
             />
         </>
     )
