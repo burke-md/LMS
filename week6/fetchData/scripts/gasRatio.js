@@ -6,15 +6,19 @@ const alchemy = new Alchemy();
 async function main() {
     const result = await alchemy.core
         .getBlock()
-   /* 
+
+    const blockNumber = result.number; 
+    const gasUsed = result.gasUsed; 
+    const gasLimit = result.gasLimit;
+
+    const gasRatio = gasUsed / gasLimit * 100;
+
     const data = {
-        blockNumber: result[0].blockNumber,
-        numberOfTx: result.length
+        blockNumber,
+        gasRatio
     }
 
     return data;
-    */
-    return result.baseFeePerGas.toString();
 };
 
 
