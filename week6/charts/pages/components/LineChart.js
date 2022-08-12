@@ -47,12 +47,7 @@ const data = {
     ]
 };
 
-export default function LineChart() {
-    //Replace w/ passed in props
-    const labelsArray = ['1', '2', '3', '4'];
-    const dataArray = [10, 20, 30, 40];
-    const chartName = "Gas Ratio";
-    
+export default function LineChart({ labelsArray, dataArray, chartName }) {
     const currentData = {
         ...data,
         labels: labelsArray,
