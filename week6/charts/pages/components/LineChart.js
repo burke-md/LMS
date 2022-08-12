@@ -20,7 +20,7 @@ ChartJS.register(
     Legend
 );
 
-const data = {
+const config = {
     labels: ['1', '2', '3'],
     datasets: [
         {
@@ -49,7 +49,7 @@ const data = {
 
 export default function LineChart({ labelsArray, dataArray, chartName }) {
     const currentData = {
-        ...data,
+        ...config,
         labels: labelsArray,
         //datasets[0].data: dataArray
     };

@@ -1,26 +1,31 @@
-import React from "react";
+import { useState } from "react";
 import LineChart from "./components/LineChart";
 
 export default function OnChainData() {
-    const labelsArray = ['1', '2', '3', '4'];
-    const dataArray = [10, 20, 30, 40];
-    const chartName = "Gas Ratio";
+    const [tetherVolumeLabels, setTetherVolumeLabls] = useState(['1', '2', '3', '4']);
+    const [tetherVolumeData, setTetherVolumeData] = useState([10, 20, 30, 40]);
+
+    const [baseFeeLabels, setBaseFeeLabls] = useState(['1', '2', '3', '4']);
+    const [baseFeeData, setBaseFeeData] = useState([10, 20, 30, 40]);
+
+    const [gasRatioLabels, setGasRatioLabls] = useState(['1', '2', '3', '4']);
+    const [gasRatioData, setGasRatioData] = useState([10, 20, 30, 40]);
 
     return (
         <>
             <LineChart 
-                labelsArray={labelsArray}
-                dataArray={dataArray}
+                labelsArray={tetherVolumeLabels}
+                dataArray={tetherVolumeData}
                 chartName={"Tether Transfer Volume"} />
 
             <LineChart 
-                labelsArray={labelsArray}
-                dataArray={dataArray}
+                labelsArray={baseFeeLabels}
+                dataArray={baseFeeData}
                 chartName={"Base Fee"} />
 
             <LineChart 
-                labelsArray={labelsArray}
-                dataArray={dataArray}
+                labelsArray={gasRatioLabels}
+                dataArray={gasRatioData}
                 chartName={"Gas Ratio"} />
         </>
     )
