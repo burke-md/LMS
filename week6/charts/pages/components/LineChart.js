@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 const data = {
-    labels: [],
+    labels: ['1', '2', '3'],
     datasets: [
         {
             label: "Chart1",
@@ -42,24 +42,29 @@ const data = {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: []
+            data: [10, 20, 30]
         }
     ]
 };
 
 export default function LineChart() {
-    const dataArray = [10, 10, 10];
-    const labelsArray = ['1', '2', '3'];
-    const currentData = {...data};
+    //Replace w/ passed in props
+    const labelsArray = ['1', '2', '3', '4'];
+    const dataArray = [10, 20, 30, 40];
+    const chartName = "Gas Ratio";
+    
+    const currentData = {
+        ...data,
+        labels: labelsArray,
+        //datasets[0].data: dataArray
+    };
+
+    currentData.datasets[0].data = dataArray;//Akward syntax - fix this
+
     return (
         <>
-            <h2> Chart ex </h2>
-            <Line 
-                data={currentData}
-                width="2000px"
-                height="2000px"
-                options={{ maintainAspectRatio: false }}
-            />
+            <h2> {chartName} </h2>
+            <Line  data={currentData} />
         </>
     )
 };
