@@ -1,5 +1,8 @@
 import { useState } from "react";
 import LineChart from "./components/LineChart";
+import fetchTransferLog from "./api/fetchTransferLog";
+import fetchBaseFee from "./api/fetchBaseFee";
+import fetchGasRatio from "./api/fetchGasRatio";
 
 export default function OnChainData() {
     const [tetherVolumeLabels, setTetherVolumeLabls] = useState(['1', '2', '3', '4']);
