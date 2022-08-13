@@ -2,10 +2,16 @@ import { Alchemy } from "alchemy-sdk";
 
 const alchemy = new Alchemy();
 
-export default async function fetchGasRatio() {
+const makeRequest = async function() {
+    const res = await alchemy.core
+    .getBlock()
 
-    const result = await alchemy.core
-        .getBlock()
+    return res;
+}
+export default async function fetchGasRatio() {
+    let result = await makeRequest();
+
+    if(!result) result = await makeRequest();
 
     const blockNumber = result.number; 
     const gasUsed = result.gasUsed; 
