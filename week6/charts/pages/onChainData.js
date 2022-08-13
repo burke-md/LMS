@@ -23,8 +23,8 @@ async function fetchChartData() {
 }
 
 export default function OnChainData() {
-    let [tetherVolumeLabels, setTetherVolumeLabels] = useState(['1', '2', '3', '4']);
-    let [tetherVolumeData, setTetherVolumeData] = useState([10, 20, 30, 40]);
+    let [tetherVolumeLabels, setTetherVolumeLabels] = useState(['1']);
+    let [tetherVolumeData, setTetherVolumeData] = useState([10]);
 
     let [baseFeeLabels, setBaseFeeLabls] = useState(['1', '2', '3', '4']);
     let [baseFeeData, setBaseFeeData] = useState([10, 20, 30, 40]);
@@ -35,18 +35,19 @@ export default function OnChainData() {
  
     const updateData = async function(){
         const newData = await fetchChartData();
-        console.log(`newData: ${JSON.stringify(newData)}`)
-
         if (!newData) console.log(`API has returned invalid data.`);
 
-        setTetherVolumeLabels([...tetherVolumeLabels, newData.blockNumber]);
-        //setBaseFeeLabls = [...baseFeeLabels, newData.blockNumber];
-        //setGasRatioLabls = [...gasRatioLabels, newData.blockNumber];
-    
-        setTetherVolumeData([...tetherVolumeData, newData.transactionVolume]);
-        //setBaseFeeData = [...baseFeeData, newData.baseFee];
-        //setGasRatioData = [...gasRatioData, newData.gasRatio];
-
+        //Ensure new data is of next eth block
+        const prevBlockNumber = tetherVolumeLabels[tetherVolumeLabels.length-1];
+        if(newData.blockNumber > prevBlockNumber){
+            setTetherVolumeLabels([...tetherVolumeLabels, newData.blockNumber]);
+            setBaseFeeLabls([...baseFeeLabels, newData.blockNumber]);
+            setGasRatioLabls([...gasRatioLabels, newData.blockNumber]);
+        
+            setTetherVolumeData([...tetherVolumeData, newData.transactionVolume]);
+            setBaseFeeData([...baseFeeData, newData.baseFee]);
+            setGasRatioData([...gasRatioData, newData.gasRatio]);
+        }
     } 
 
     updateData();
