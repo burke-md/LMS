@@ -16,10 +16,13 @@ const makeRequest = async function() {
 }
 
 export default async function fetchTransferLog() {
-  let result = await makeRequest();
+    let result = await makeRequest();
 
-  if(!result) result = await makeRequest();
-    
+    if(result == undefined) {
+        console.log(`bad result`)
+        return -1;
+    }
+
     const data = {
         blockNumber: result[0].blockNumber,
         numberOfTx: result.length

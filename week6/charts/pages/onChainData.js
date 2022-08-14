@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useInterval from "./hooks/useInterval";
 import LineChart from "./components/LineChart";
 import fetchTransferLog from "./api/fetchTransferLog";
 import fetchBaseFee from "./api/fetchBaseFee";
@@ -22,9 +23,11 @@ async function fetchChartData() {
     }
 }
 
+
+
 export default function OnChainData() {
-    let [tetherVolumeLabels, setTetherVolumeLabels] = useState(['1']);
-    let [tetherVolumeData, setTetherVolumeData] = useState([10]);
+    let [tetherVolumeLabels, setTetherVolumeLabels] = useState(['0']);
+    let [tetherVolumeData, setTetherVolumeData] = useState([0]);
 
     let [baseFeeLabels, setBaseFeeLabls] = useState(['1', '2', '3', '4']);
     let [baseFeeData, setBaseFeeData] = useState([10, 20, 30, 40]);
@@ -32,8 +35,53 @@ export default function OnChainData() {
     let [gasRatioLabels, setGasRatioLabls] = useState(['1', '2', '3', '4']);
     let [gasRatioData, setGasRatioData] = useState([10, 20, 30, 40]);
 
- 
-    const updateData = async function(){
+    useInterval(async () => {
+        const currentBlockNum = tetherVolumeLabels.slice(-1);
+        const newData = await fetchChartData();
+/*
+        console.log(`new data block num: ${JSON.stringify(newData.blockNumber)}`)
+        console.log(`current block num: ${currentBlockNum}`)
+        console.log(`lables: ${tetherVolumeLabels}`)
+*/
+
+        console.log(` tx : ${newData.transactionVolume}`);
+
+        if(newData.blockNumber == currentBlockNum ||
+            newData.blockNumber == undefined){
+            console.log(`invalid block`)
+            return; //Do not add new data to state -> continue to poll new data
+        }
+
+        setTetherVolumeLabels([...tetherVolumeLabels, newData.blockNumber]);
+        setTetherVolumeData([...tetherVolumeData, newData.transactionVolume]);
+        
+    }, 3000)
+
+      /*
+    async function pollData() {
+        let x;
+        async function newTransferData() {
+            const res = await fetchTransferLog();
+            return res
+        }
+
+        setTimeout(() => {
+            console.log(`timeout called`)
+            x = await newTransferData();
+
+            if(x && 
+                x.blockNumber > tetherVolumeLabels[tetherVolumeLabels.length-1]) {
+                    setTetherVolumeLabels([...tetherVolumeLabels, x.blockNumber]);
+                    setTetherVolumeData([...tetherVolumeData, x.numberOfTx]);
+            } else {
+                console.log(x);
+            }
+            
+        }, "1000");
+    }
+*/
+
+    /*const updateData = async function(){
         const newData = await fetchChartData();
         if (!newData) console.log(`API has returned invalid data.`);
 
@@ -49,25 +97,17 @@ export default function OnChainData() {
             setGasRatioData([...gasRatioData, newData.gasRatio]);
         }
     } 
+*/
+    //updateData();
 
-    updateData();
-    
+    //pollData();
+
     return (
         <>
             <LineChart 
                 labelsArray={tetherVolumeLabels}
                 dataArray={tetherVolumeData}
                 chartName={"Tether Transfer Volume"} />
-
-            <LineChart 
-                labelsArray={baseFeeLabels}
-                dataArray={baseFeeData}
-                chartName={"Base Fee"} />
-
-            <LineChart 
-                labelsArray={gasRatioLabels}
-                dataArray={gasRatioData}
-                chartName={"Gas Ratio"} />
         </>
     )
 };
