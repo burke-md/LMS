@@ -24,7 +24,7 @@ const config = {
     labels: ['0'],
     datasets: [
         {
-            label: "Chart1",
+            label: "",
             fill: false,
             lineTension: 0.1,
             backgroundColor: 'rgb(75,192,192,0.4)',
@@ -47,17 +47,13 @@ const config = {
     ]
 };
 
-export default function LineChart({ labelsArray, dataArray, chartName, dataName }) {
+export default function LineChart({ xAxisElementArray, lineZeroDataArray, chartName, lineName }) {
     const currentData = {
         ...config,
     };
-
-    currentData.labels = labelsArray; //Awkward syntax - fix this
-    currentData.datasets[0].data = dataArray; 
-    currentData.datasets[0].label = dataName;
-
-    console.log(`labels len : ${currentData.labels.length}`)
-    console.log(`config data len : ${currentData.datasets[0].data.length}`)
+    currentData.labels = xAxisElementArray; //Awkward syntax - fix this
+    currentData.datasets[0].data = lineZeroDataArray; 
+    currentData.datasets[0].label = lineName;
 
     return (
         <>
