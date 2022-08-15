@@ -35,8 +35,8 @@ export default function gasRatioChart() {
         <LineChart 
             xAxisElementArray={blockNumbers}
             lineZeroDataArray={gasRatioData}
-            chartName={"Basefee"} 
-            lineName={"Basefeee (wei)"}
+            chartName={"Gas Ratio"} 
+            lineName={"gasUsed / gasLimit (percentage)"}
         />
     )
 };
