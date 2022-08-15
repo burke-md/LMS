@@ -22,30 +22,30 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="/onChainData"
+          <a href="/basefeeChart"
             className={styles.card}
           >
-            <h2>Charts &rarr;</h2>
+            <h2>Basefee data &rarr;</h2>
             <p>
-              View data related to token transfers, changing base fees and gas use/limit ratio.
+              View data related to Ethereum block basefee.
             </p>
           </a>
 
-          <a href=""
+          <a href="/gasRatioChart"
             className={styles.card}
           >
-            <h2> &rarr;</h2>
+            <h2> Gas Ratio data &rarr;</h2>
             <p>
-              Text here text here text here.
+              View data related to Ethereum block gas use.
             </p>
           </a>
           
-          <a href=""
+          <a href="/tetherTxChart"
             className={styles.card}
           >
-            <h2> &rarr;</h2>
+            <h2> Transfers on tether &rarr;</h2>
             <p>
-              Text here text here text here.
+              View data related to transfers of the ERC20 token, Tether.
             </p>
           </a>
 
