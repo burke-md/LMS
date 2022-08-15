@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 const config = {
-    labels: ['1', '2', '3'],
+    labels: ['0'],
     datasets: [
         {
             label: "Chart1",
@@ -42,19 +42,22 @@ const config = {
             pointHoverBorderWidth: 2,
             pointRadius: 1,
             pointHitRadius: 10,
-            data: [10, 20, 30]
+            data: [0]
         }
     ]
 };
 
-export default function LineChart({ labelsArray, dataArray, chartName }) {
+export default function LineChart({ labelsArray, dataArray, chartName, dataName }) {
     const currentData = {
         ...config,
-        labels: labelsArray,
-        //datasets[0].data: dataArray
     };
 
-    currentData.datasets[0].data = dataArray;//Akward syntax - fix this
+    currentData.labels = labelsArray; //Awkward syntax - fix this
+    currentData.datasets[0].data = dataArray; 
+    currentData.datasets[0].label = dataName;
+
+    console.log(`labels len : ${currentData.labels.length}`)
+    console.log(`config data len : ${currentData.datasets[0].data.length}`)
 
     return (
         <>

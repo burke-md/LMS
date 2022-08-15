@@ -38,13 +38,6 @@ export default function OnChainData() {
     useInterval(async () => {
         const currentBlockNum = tetherVolumeLabels.slice(-1);
         const newData = await fetchChartData();
-/*
-        console.log(`new data block num: ${JSON.stringify(newData.blockNumber)}`)
-        console.log(`current block num: ${currentBlockNum}`)
-        console.log(`lables: ${tetherVolumeLabels}`)
-*/
-
-        console.log(` tx : ${newData.transactionVolume}`);
 
         if(newData.blockNumber == currentBlockNum ||
             newData.blockNumber == undefined){
@@ -57,57 +50,13 @@ export default function OnChainData() {
         
     }, 3000)
 
-      /*
-    async function pollData() {
-        let x;
-        async function newTransferData() {
-            const res = await fetchTransferLog();
-            return res
-        }
-
-        setTimeout(() => {
-            console.log(`timeout called`)
-            x = await newTransferData();
-
-            if(x && 
-                x.blockNumber > tetherVolumeLabels[tetherVolumeLabels.length-1]) {
-                    setTetherVolumeLabels([...tetherVolumeLabels, x.blockNumber]);
-                    setTetherVolumeData([...tetherVolumeData, x.numberOfTx]);
-            } else {
-                console.log(x);
-            }
-            
-        }, "1000");
-    }
-*/
-
-    /*const updateData = async function(){
-        const newData = await fetchChartData();
-        if (!newData) console.log(`API has returned invalid data.`);
-
-        //Ensure new data is of next eth block
-        const prevBlockNumber = tetherVolumeLabels[tetherVolumeLabels.length-1];
-        if(newData.blockNumber > prevBlockNumber){
-            setTetherVolumeLabels([...tetherVolumeLabels, newData.blockNumber]);
-            setBaseFeeLabls([...baseFeeLabels, newData.blockNumber]);
-            setGasRatioLabls([...gasRatioLabels, newData.blockNumber]);
-        
-            setTetherVolumeData([...tetherVolumeData, newData.transactionVolume]);
-            setBaseFeeData([...baseFeeData, newData.baseFee]);
-            setGasRatioData([...gasRatioData, newData.gasRatio]);
-        }
-    } 
-*/
-    //updateData();
-
-    //pollData();
-
     return (
         <>
             <LineChart 
                 labelsArray={tetherVolumeLabels}
                 dataArray={tetherVolumeData}
-                chartName={"Tether Transfer Volume"} />
+                chartName={"Tether Transfer Volume"}
+                dataName ={"Number of transfers"} />
         </>
     )
 };

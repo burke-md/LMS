@@ -18,7 +18,7 @@ const makeRequest = async function() {
 export default async function fetchTransferLog() {
     let result = await makeRequest();
 
-    if(result == undefined) {
+    if(result[0] == undefined) {
         console.log(`bad result`)
         return -1;
     }
