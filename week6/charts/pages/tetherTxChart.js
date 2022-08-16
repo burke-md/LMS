@@ -5,7 +5,6 @@ import fetchTransferLog from "./api/fetchTransferLog";
 
 async function fetchChartData() {
     const newGasRatioData = await fetchTransferLog();
-
     return {
         blockNumber: newGasRatioData.blockNumber,
         numberOfTx: newGasRatioData.numberOfTx

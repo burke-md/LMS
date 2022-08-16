@@ -5,19 +5,15 @@ import fetchBaseFee from "./api/fetchBaseFee";
 
 async function fetchChartData() {
     const newBaseFeeData = await fetchBaseFee();
-
     return {
         blockNumber: newBaseFeeData.blockNumber,
         baseFee: newBaseFeeData.baseFee
     }
 }
 
-
-
 export default function OnChainData() {
     let [blockNumbers, setBlockNumbers] = useState(['0']);
     let [baseFeeData, setBaseFeeData] = useState([0]);
-
 
     useInterval(async () => {
         const currentBlockNum = blockNumbers.slice(-1);

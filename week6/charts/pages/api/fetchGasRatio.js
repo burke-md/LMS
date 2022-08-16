@@ -5,7 +5,6 @@ const alchemy = new Alchemy();
 const makeRequest = async function() {
     const res = await alchemy.core
     .getBlock()
-
     return res;
 }
 export default async function fetchGasRatio() {
@@ -23,7 +22,6 @@ export default async function fetchGasRatio() {
         blockNumber,
         gasRatio
     }
-
     return data;
 };
 

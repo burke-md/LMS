@@ -1,11 +1,10 @@
-import { Alchemy, Network } from "alchemy-sdk";
+import { Alchemy } from "alchemy-sdk";
 
 const alchemy = new Alchemy();
 
 const makeRequest = async function() {
     const res = await alchemy.core
     .getBlock();
-    
     return res;
 }
 export default async function fetchBaseFee() {
@@ -17,7 +16,6 @@ export default async function fetchBaseFee() {
         blockNumber: result ? result.number: -1, 
         baseFee: Number(result.baseFeePerGas.toString())
     }
-
     return data;
 };
 

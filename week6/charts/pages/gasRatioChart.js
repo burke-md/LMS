@@ -5,7 +5,6 @@ import fetchGasRatio from "./api/fetchGasRatio";
 
 async function fetchChartData() {
     const newGasRatioData = await fetchGasRatio();
-
     return {
         blockNumber: newGasRatioData.blockNumber,
         gasRatio: newGasRatioData.gasRatio

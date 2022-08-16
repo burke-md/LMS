@@ -11,7 +11,6 @@ const makeRequest = async function() {
                 ethers.utils.id("Transfer(address,address,uint256)")
             ]
         });
-
     return res;
 }
 
@@ -27,7 +26,6 @@ export default async function fetchTransferLog() {
         blockNumber: result[0].blockNumber,
         numberOfTx: result.length
     }
-
     return data;
 }
 
