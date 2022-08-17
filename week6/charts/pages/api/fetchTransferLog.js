@@ -30,11 +30,15 @@ export default async function fetchTransferLog(blockNum) {
         return null;
     }
 
-    const data = {
-        blockNumber: result[0].blockNumber,
-        numberOfTx: result.length
+    if(result[0] !== undefined) {
+        const data = {
+            blockNumber: result[0].blockNumber,
+            numberOfTx: result.length
+        }
+        return data;
     }
-    return data;
+    
+    return null;
 }
 
 
