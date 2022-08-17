@@ -10,42 +10,25 @@ export default function tetherTxChart() {
     useInterval(async () => {
         const xAxisLength = blockNumbers.length;
         let targetBlock;
-        // three stages:
-        // X first render
-        // less than ten
-        // greater than ten
 
         if(xAxisLength < 1) {
             targetBlock = null;
         }
 
-        if(xAxisLength >= 1 && xAxisLength <= 10) {
-            //
-            let z = blockNumbers;
-            let x = blockNumbers[0];
-            console.log(`xAxis length: ${xAxisLength}`)
-            console.log(`full block num array: ${z}`)
-            console.log(`first index: ${x}`)
-            //
+        if(xAxisLength > 0 && xAxisLength < 4) {
             targetBlock = Number(blockNumbers[0]) - 1;
-            console.log(`target block: ${targetBlock}`)
         }
 
-        if(xAxisLength > 10) {
+        if(xAxisLength > 3) {
             targetBlock = Number(blockNumbers.slice(-1)) + 1;
-            console.log(`target block: ${targetBlock}`)
         }        
 
         const newData = await fetchTransferLog(targetBlock);
-
-        //Clean data
 
         if(!newData){
             console.log(`Invalid response.`);
             return; //Do not add new data to state -> continue to poll new data
         }
-
-        //TODO make check for repeat data??
 
         let cleanedBlockNumbersArr;
         let cleanedTxDataArr;
@@ -55,21 +38,16 @@ export default function tetherTxChart() {
             cleanedTxDataArr = [newData.numberOfTx];
         }
 
-        if(xAxisLength > 0 && xAxisLength < 11) {
+        if(xAxisLength > 0 && xAxisLength < 4) {
             cleanedBlockNumbersArr = [newData.blockNumber, ...blockNumbers];  
             cleanedTxDataArr = [newData.numberOfTx, ...txData];
         }
 
-        if(xAxisLength > 10) {
+        if(xAxisLength > 3) {
             cleanedBlockNumbersArr = [...blockNumbers, newData.blockNumber];
             cleanedTxDataArr = [...txData, newData.numberOfTx];
         }
-
-        console.log(`right before setting state`);
-        console.log(`BN.len: ${cleanedBlockNumbersArr.length}`);
-        console.log(`TX.len: ${cleanedTxDataArr.length}`);
-        console.log(`===`)
-
+ 
         setBlockNumbers([...cleanedBlockNumbersArr]);
         setTxData([...cleanedTxDataArr]);
     }, 3000)
