@@ -31,25 +31,29 @@ export default function OnChainData() {
         }
 
         let cleanedBlockNumbersArr;
-        let cleanedGasRatioDataArr;
+        let cleanedBaseFeeDataArr;
+        const baseFeeGwei = Number(newData.baseFee) / 1000000000;
 
         if(xAxisLength === 0) {
             cleanedBlockNumbersArr = [newData.blockNumber];
-            cleanedGasRatioDataArr = [newData.baseFee];
+            cleanedBaseFeeDataArr = [baseFeeGwei];
         }
 
         if(xAxisLength > 0 && xAxisLength < 4) {
             cleanedBlockNumbersArr = [newData.blockNumber, ...blockNumbers];  
-            cleanedGasRatioDataArr = [newData.baseFee, ...baseFeeData];
+            cleanedBaseFeeDataArr = [baseFeeGwei, ...baseFeeData];
         }
 
         if(xAxisLength > 3) {
             cleanedBlockNumbersArr = [...blockNumbers, newData.blockNumber];
-            cleanedGasRatioDataArr = [...baseFeeData, newData.baseFee];
+            cleanedBaseFeeDataArr = [...baseFeeData, baseFeeGwei];
         }
   
         setBlockNumbers([...cleanedBlockNumbersArr]);
-        setBaseFeeData([...cleanedGasRatioDataArr]);
+        setBaseFeeData([...cleanedBaseFeeDataArr]);
+        console.log(`Post set state x: ${cleanedBlockNumbersArr}`)
+        console.log(`Post set state Y: ${cleanedBaseFeeDataArr}`)
+
     }, 3000)
     
     return (
@@ -57,7 +61,7 @@ export default function OnChainData() {
             xAxisElementArray={blockNumbers}
             lineZeroDataArray={baseFeeData}
             chartName={"Basefee"} 
-            lineName={"Basefeee (wei)"}
+            lineName={"Basefeee (Gwei)"}
         />
     )
 };

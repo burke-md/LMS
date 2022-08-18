@@ -25,10 +25,8 @@ const makeRequest = async function(blockNum) {
 
 export default async function fetchTransferLog(blockNum) {
     const result = await makeRequest(blockNum);
-    if(result == null ||
-        result == undefined) {
-        return null;
-    }
+    
+    if(result == null || result == undefined) return null;
 
     if(result[0] !== undefined) {
         const data = {
