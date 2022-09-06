@@ -7,5 +7,9 @@ Initial thoughts on possible vulnerability:
 - [ ] `unwrap` function transfers funds before updating ledger
   - [ ] Within the `unwrap` function there is a `Address.sendValue` TX. The code base warns of a reentrancy attack here
   - [ ] Possibly use a dummy contract w/ a fallback function to recall `unwarp` and drain funds. 
+- [ ] How can we insert an overriden balance check in `borrow` func that always returns `before` value (or ten)?
 
-How can we insert an overriden balance check that always returns `before` value (or ten)?
+## The plan
+
+- [ ] Create attacking contract w/
+  - [ ] Receive fall back func
