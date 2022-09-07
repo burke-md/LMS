@@ -3,11 +3,6 @@ const { ethers } = require('hardhat');
 const { MerkleTree } = require('merkletreejs')
 const { keccak256 } = ethers.utils;
 const { BigNumber, utils } = ethers;
-const fs = require('fs/promises');
-
-const data = require('../whitelist/raw/addressArray');
-const rootOutputLocation = './root.txt';
-const proofOutputLocation = './proofs.txt';
 
 use(require('chai-as-promised'));
 
@@ -17,7 +12,7 @@ function revertReason(reason) {
 
 const TOKEN_PRICE = "0.07";
 
-xdescribe('The Contract proxy:', function () {
+describe('The Contract proxy:', function () {
     let instance = null;
     beforeEach(async function () {
         const ContractFactory = await ethers.getContractFactory("Contract");
@@ -455,12 +450,10 @@ describe('The Contract pausing:', function () {
     });
 
     it('Should toggle pause on and off and then mint w/o issue.', async () => {
-        const [owner, acct1, acct2] = await ethers.getSigners();
-        
         await instance.pause();
         await instance.unpause();
-
         await instance.setPublicMint(true);
+        
         await expect(instance.publicMint({
             value: ethers.utils.parseEther(TOKEN_PRICE)
                 })).to.not.be.rejected;
@@ -468,11 +461,9 @@ describe('The Contract pausing:', function () {
     });
 
     it('Should throw minting error when paused.', async () => {
-        const [owner, acct1, acct2] = await ethers.getSigners();
-        
         await instance.pause();
-
         await instance.setPublicMint(true);
+
         await expect(instance.publicMint({
             value: ethers.utils.parseEther(TOKEN_PRICE)
                 })).to.be.rejectedWith(revertReason(
