@@ -26,5 +26,14 @@ Solution:
 
 Enter call data of size 4(bytes), in hex `0xAAAAAAAA`
 
+### Challenge 4:
+
+`XOR`: Bitwise XOR operation will pop the first two values off the stack and push the result back on.
+
+Solution:
+
+The `CODESIZE` is 12 (0B) so we will input 6 (12 ^ 6 = 10)
+See helpful link for calculating XOR results: https://xor.pw/#
+
 
 
