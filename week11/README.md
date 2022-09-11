@@ -78,9 +78,11 @@ The stack: |0C|1|
 ### STEP 09
 - Pop first two items off stack. First, the location of the `JUMPDEST` if the second value is non zero.
 
-
-
-
 The solution: `16`
 
+## Challenge 6
 
+`CALLDATALOAD`: This opcode will pop the first value off the call stack and use it as a byte offset for reading the call data. The result is pushed back onto the stack.
+
+The solution: `0x000000000000000000000000000000000000000000000000000000000000000A`
+`
