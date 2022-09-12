@@ -86,3 +86,46 @@ The solution: `16`
 
 The solution: `0x000000000000000000000000000000000000000000000000000000000000000A`
 `
+## Challenge 7
+
+`CALLDATACOPY`: Pops 3 items off stack & copies calldata to memory.
+- destOffset: byte offset in the memory where the result will be copied
+- offset: byte offset in the calldata to copy
+- size: byte size to copy
+
+`CREATE`: Pops 3 items off stack & pushes deployed contract address onto stack.
+- value: value in wei to send to the new account.
+- offset: byte offset in the memory in bytes, the initialisation code for the new account.
+- size: byte size to copy (size of the initialisation code).
+
+
+`EXTCODESIZE`: Pops contract address of stack and pushes code size of contract (bytes) back onto stack (Run time code only, this does not include what is written in the constructor).
+
+Notes:
+
+Using 'X' through here as variable, dependant on input
+
+Step 03: |X|00|00|
+
+Step 08: |X|00|00|
+
+Step 0C: |X|01|
+
+Step 0F: |X|13| <= Frist item ('X') must be non-zero value for `JUMPI`
+
+Working backwards through the variables, we can see that the `EXTCODESIZE` must push a value of `01` onto the stack for this to succeed. 
+
+Solution:
+
+The following opcodes/bytecode essentially result in a single opcode contract that runs `STOP` (opcode number 00)
+```
+PUSH1 0x00
+PUSH1 0x00
+MSTORE
+PUSH1 0x01
+PUSH1 0x00
+RETURN
+```
+
+`0x600060005260016000f3`
+
