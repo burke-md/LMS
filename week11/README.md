@@ -163,3 +163,14 @@ RETURN
 ```
 
 `60fd60005360016000f3`
+
+## Challenge 9
+
+`MUL`: Pops two items off stack and returns the product
+`LT`: Pops two items off stack, returns `1` if the left integer is smaller, `0` otherwise.
+
+Solution: 
+
+`2`
+
+`0xFFFFFFFF`
