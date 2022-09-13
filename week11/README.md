@@ -129,3 +129,37 @@ RETURN
 
 `0x600060005260016000f3`
 
+## Challenge 8
+
+`SWAP5`: Replace item 1 and 6 on call stack, with each other.
+
+`CALL`: Pops seven items off the call stack
+- gas: amount of gas to send to the sub context to execute. The gas that is not used by the sub context is returned to this one.
+- address: the account which context to execute.
+- value: value in wei to send to the account.
+- argsOffset: byte offset in the memory in bytes, the calldata of the sub context.
+- argsSize: byte size to copy (size of the calldata).
+- retOffset: byte offset in the memory in bytes, where to store the return data of the sub context.
+- retSize: byte size to copy (size of the return data).
+
+Solution: 
+
+Working backwards, we need the equality check to pass (and push a 1 onto the stack for the `JUMPI` to work).
+This means instruction `13`, `Call` needs to fail(revert) and push `00` to the stack.
+
+`success: return 0 if the sub context reverted, 1 otherwise.`
+
+So let's look at what we need to do to make the `CALL` opcode revert => 
+
+We will use the evm playground from before and follow a similar pattern (https://www.evm.codes/playground). The first instruction we will push to the stack `FD` is litterally the the `REVERT` opcode, the rest is following the pattern from before. 
+
+```
+PUSH1 0xfd
+PUSH1 0x00
+MSTORE8
+PUSH1 0x01
+PUSH1 0x00
+RETURN
+```
+
+`60fd60005360016000f3`
