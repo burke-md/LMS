@@ -1,0 +1,15 @@
+{
+  "name": "1155",
+  "version": "1.0.0",
+  "description": "Implement an erc1155 compliant contract in YUL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^2.0.0",
+    "hardhat": "^2.11.2"
+  }
+}
