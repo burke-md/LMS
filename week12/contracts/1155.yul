@@ -40,6 +40,25 @@ object "1155" {
 /*--------------Calldata decoding--------------------------------------------*/
 /*--------------Calldata encoding--------------------------------------------*/
 /*--------------Events-------------------------------------------------------*/
+            function emitTransferSingle(operator, from, to, id, value) {
+        
+            }
+
+            function emitTransferBatch(operator, from, to, ids, values) {
+
+            }
+
+            function emitApprovalForAll(account, operator, approved) {
+
+            }
+
+            function emitURI(value, id) {
+
+            }
+
+            function emitEvent(signatureHash, indexed1, indexed2, nonIndexed) {
+
+            }
 /*--------------Storage layout-----------------------------------------------*/
 /*--------------Storage access-----------------------------------------------*/
 /*--------------Utility functions--------------------------------------------*/
