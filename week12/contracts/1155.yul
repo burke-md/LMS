@@ -71,12 +71,12 @@ object "1155" {
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
-            function _balanceOf(account, id) -> {
-
+            function _balanceOf(account, id) -> v {
+                v := 
             }
 
             function balanceOfBatch(addressArr, idArr) -> balanceArr {
-                //Define array to be appended to
+                balanceArr :=
 
                 for { let i := 1 } lt() { i = add(i, 1) } {
                     val := _balanceOf( , )
@@ -90,10 +90,8 @@ object "1155" {
 
             }
 
-            function isApprvedForAll(account, operator) {
+            function isApprvedForAll(account, operator) -> isApproved {
                 isApproved := false
-
-                return isApproved
             }
             
             function _safeTransferFrom(from, to, id, amount, data) {
