@@ -1,6 +1,16 @@
 object "1155" {
     code {
 
+        /* constructor (creation code)
+        *  
+        *  Assign owner to storage slot 0
+        *  Deploy runstime code
+        */
+
+        sstore(0, caller())
+
+        datacopy(0, dataoffset("runtime"), datasize("runtime"))
+        return(0, dataszie("runtime"))
     }
     object "runtime" {
         code {
