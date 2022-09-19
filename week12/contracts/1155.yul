@@ -8,28 +8,29 @@ object "1155" {
             require(iszero(calleValue()))
 /*--------------Dispatcher---------------------------------------------------*/
             switch selector()
-            // balanceOf(account, id)
-            case 0x17f87bf7 { 
+            // balanceOf(address,uint256)
+            case 0x00fdd58e { 
 
             }
-            // balanbceOfBatch(accounts,ids)
-            case 0x0dce3006 {
+            // balanbceOfBatch(address[],uint256[])
+            case 0x4e1273f4 {
 
             }
-            // setApprovalForAll(operator, approved)
-            case 0xc578b524 {
+
+            // setApprovalForAll(address,bool)
+            case 0xa22cb465 {
 
             }
-            // isApprovedForAll(account, operator)
-            case 0x62554e03 {
+            // isApprovedForAll(address,address)
+            case 0xe985e9c5 {
 
             }
-            // safeTransferFrom(from, to, id, amount, data)
-            case 0xd2f28423 {
+            // safeTransferFrom(address,address,uint256,uint256,bytes)
+            case 0xf242432a {
 
             }
-            // safeBatchTransferFrom(from, to, ids, amounts, data)
-            case 0x5376c70b {
+            // safeBatchTransferFrom(address,address,uint256[],uint256,bytes)
+            case 0x2eb2c2d6 {
 
             }
             default {
@@ -37,6 +38,7 @@ object "1155" {
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
+
 /*--------------Calldata decoding--------------------------------------------*/
 /*--------------Calldata encoding--------------------------------------------*/
 /*--------------Events-------------------------------------------------------*/
