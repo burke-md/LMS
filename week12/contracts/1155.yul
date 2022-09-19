@@ -18,10 +18,12 @@ object "1155" {
             require(iszero(calleValue()))
 /*--------------Dispatcher---------------------------------------------------*/
             switch selector()
+
             // balanceOf(address,uint256)
             case 0x00fdd58e { 
-
+                return(balanceOf(decodeAsAddress(0), decodeAsUint(1))
             }
+
             // balanbceOfBatch(address[],uint256[])
             case 0x4e1273f4 {
 
@@ -31,25 +33,43 @@ object "1155" {
             case 0xa22cb465 {
 
             }
+
             // isApprovedForAll(address,address)
             case 0xe985e9c5 {
 
             }
+
             // safeTransferFrom(address,address,uint256,uint256,bytes)
             case 0xf242432a {
 
             }
+
             // safeBatchTransferFrom(address,address,uint256[],uint256,bytes)
             case 0x2eb2c2d6 {
 
             }
+
             default {
                 revert(0,0)
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
+            function balanceOf(account, id) -> {
+
+            }
 
 /*--------------Calldata decoding--------------------------------------------*/
+            function selector() -> s {
+
+            }
+
+            function decodeAsAddress(offset) -> v {
+
+            }
+
+            function decodeAsUint(offset) -> {
+
+            }
 /*--------------Calldata encoding--------------------------------------------*/
 /*--------------Events-------------------------------------------------------*/
             function emitTransferSingle(operator, from, to, id, value) {
