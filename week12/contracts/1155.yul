@@ -71,18 +71,24 @@ object "1155" {
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
-
+            
+            /* Requires:
+            *  'account' cannot be the zero address
+            */
             function balanceOf(account, id) -> v {
                 revertIfZeroAddress(account)
 
                 v := 
             }
-
+            
+            /* Requires:
+            *  - 'accounts' and 'ids' must have same length
+            */
             function balanceOfBatch(accounts, ids) -> balanceArr {
 
-                /* note:
-                *      The array args are pointers to memory slots, which show
-                *      the length. Location of array args must be calculated.
+                /* Note:
+                *  The array args are pointers to memory slots, which show
+                *  the length. Location of array args must be calculated.
                 */
 
                 addressArrLen := mload(acounts)
@@ -100,6 +106,9 @@ object "1155" {
 
             }
 
+            /* Requirements:
+            *  - `operator` cannoth be the caller
+            */
             function setApprovalForAll(operator, approved) {
                 revertIfEqual(operator, caller())
             }
@@ -130,18 +139,23 @@ object "1155" {
                 //pass appropriate args above
             }
 
+            /* Requirements:
+            *  - `ids` and `amounts` must have same length
+            *  - `to` must not be zero address
+            */  
             function safeBatchTransferFrom(from, to, ids, amounts, data) {
 
-                /* note:
-                *      The array args are pointers to memory slots, which show
-                *      the length. Location of array args must be calculated.
+                /* Note:
+                *  The array args are pointers to memory slots, which show
+                *  the length. Location of array args must be calculated.
                 */
 
                 idArrLen := mload(ids)
                 amountArrLen := mload(amounts) 
 
                 revertIfNotEqual(idArrLen, amountArrLen)
-                
+                revertIfZeroAddress(to)
+
                 for { let i := 1 } lt() { i = add(i, 1) } {
                     _transfer()
                     //pass appropriate args above
@@ -149,10 +163,6 @@ object "1155" {
                 }
             }
             
-            function _transfer(from, to, id, amount) {
-                revertIfZeroAddress(to)
-            }
-
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
                 s := div(calldataload(0), 
