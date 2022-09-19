@@ -73,6 +73,8 @@ object "1155" {
 /*--------------Functions for Dispatcher-------------------------------------*/
 
             function _balanceOf(account, id) -> v {
+                revertIfZeroAddress(account)
+
                 v := 
             }
 
@@ -96,17 +98,22 @@ object "1155" {
             }
             
             function _safeTransferFrom(from, to, id, amount, data) {
-
+                _transfer()
+                //pass appropriate args above
             }
 
             function safeBatchTransferFrom(from, to, ids, amounts, data) {
                 
                 for { let i := 1 } lt() { i = add(i, 1) } {
-                    _safeTransferFrom()
+                    _transfer()
+                    //pass appropriate args above
                     //increment counter
                 }
             }
-
+            
+            function _transfer(from, to, id, amount) {
+                revertIfZeroAddress(to)
+            }
 
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
@@ -174,8 +181,12 @@ object "1155" {
                 // log2(offset,size,topic1,topic2)
                 log2(0x00, x, signatureHash, id)
             }
-
-/*--------------Utility functions--------------------------------------------*/
+/*--------------Utils--------------------------------------------------------*/
+            function revertIfZeroAddress(_address) {
+                if iszero(_address) {
+                    revert(0, 0)
+                }
+            }
         }
     }
 } 
