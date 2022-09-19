@@ -151,7 +151,12 @@ object "1155" {
 
             }
 
-            function emitEvent(signatureHash, indexed1, indexed2, nonIndexed) {
+            function emitEvent(
+                signatureHash, 
+                indexed1, 
+                indexed2, 
+                indexed3, 
+                nonIndexed) {
 
             }
 /*--------------Storage layout-----------------------------------------------*/
