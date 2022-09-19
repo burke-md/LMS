@@ -71,6 +71,7 @@ object "1155" {
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
+
             function _balanceOf(account, id) -> v {
                 v := 
             }
@@ -134,19 +135,20 @@ object "1155" {
 /*--------------Calldata encoding--------------------------------------------*/
 /*--------------Events-------------------------------------------------------*/
             function emitTransferSingle(operator, from, to, id, value) {
-        
+                let signatureHash := 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62
             }
 
             function emitTransferBatch(operator, from, to, ids, values) {
-
+                let signatureHash := 0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb
             }
 
             function emitApprovalForAll(account, operator, approved) {
-
+                let signatureHash := 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31
             }
 
-            function emitURI(value, id) {
 
+            function emitURI(value, id) {
+                let signatureHash := 0x6bb7ff708619ba0610cba295a58592e0451dee2622938c8755667688daf3529b
             }
 
             function emitEvent(
@@ -157,8 +159,6 @@ object "1155" {
                 nonIndexed) {
 
             }
-/*--------------Storage layout-----------------------------------------------*/
-/*--------------Storage access-----------------------------------------------*/
 /*--------------Utility functions--------------------------------------------*/
         }
     }
