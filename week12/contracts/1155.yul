@@ -136,29 +136,33 @@ object "1155" {
 /*--------------Events-------------------------------------------------------*/
             function emitTransferSingle(operator, from, to, id, value) {
                 let signatureHash := 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62
+
+                // log4(offset,size,topic1,topic2,topic3,topic4)
+                log4(x, x, signatureHash, operator, from, to)
             }
 
             function emitTransferBatch(operator, from, to, ids, values) {
                 let signatureHash := 0x4a39dc06d4c0dbc64b70af90fd698a233a518aa5d07e595d983b8c0526c8f7fb
+                
+                // log4(offset,size,topic1,topic2,topic3,topic4)
+                log4(x, x, signatureHash, operator, from, to)
             }
 
             function emitApprovalForAll(account, operator, approved) {
                 let signatureHash := 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31
+                
+                // log3(offset,size,topic1,topic2,topic3)
+                log3(x, x, signatureHash, owner, operator)
             }
 
 
             function emitURI(value, id) {
                 let signatureHash := 0x6bb7ff708619ba0610cba295a58592e0451dee2622938c8755667688daf3529b
+
+                // log2(offset,size,topic1,topic2)
+                log2(x, x, signatureHash, id)
             }
 
-            function emitEvent(
-                signatureHash, 
-                indexed1, 
-                indexed2, 
-                indexed3, 
-                nonIndexed) {
-
-            }
 /*--------------Utility functions--------------------------------------------*/
         }
     }
