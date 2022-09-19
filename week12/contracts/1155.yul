@@ -46,12 +46,24 @@ object "1155" {
 
             // safeTransferFrom(address,address,uint256,uint256,bytes)
             case 0xf242432a {
-
+                _safeTransferFrom(
+                    decodeAsAddress(0),
+                    decodeAsAddress(1),
+                    decodeAsUint(2),
+                    decodeAsUint(3),
+                    decodeAsBytes(4)
+                )
             }
 
             // safeBatchTransferFrom(address,address,uint256[],uint256,bytes)
             case 0x2eb2c2d6 {
-
+                safeBatchTransferFrom(
+                   decodeAsAddress(0),
+                   decodeAsAddress(1),
+                   decodeAsUintArr(2),
+                   decodeAsUint(3),
+                   decodeAsBytes(4)
+                ) 
             }
 
             default {
@@ -83,9 +95,18 @@ object "1155" {
 
                 return isApproved
             }
+            
+            function _safeTransferFrom(from, to, id, amount, data) {
+
+            }
+
 
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
+
+            }
+
+            function decodeAsBytes(offset) -> {
 
             }
 
