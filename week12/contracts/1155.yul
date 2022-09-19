@@ -25,7 +25,7 @@ object "1155" {
 
             // balanceOf(address,uint256)
             case 0x00fdd58e { 
-                return(_balanceOf(decodeAsAddress(0), decodeAsUint(1))
+                return(balanceOf(decodeAsAddress(0), decodeAsUint(1))
             }
 
             // balanbceOfBatch(address[],uint256[])
@@ -72,7 +72,7 @@ object "1155" {
 
 /*--------------Functions for Dispatcher-------------------------------------*/
 
-            function _balanceOf(account, id) -> v {
+            function balanceOf(account, id) -> v {
                 revertIfZeroAddress(account)
 
                 v := 
@@ -104,12 +104,28 @@ object "1155" {
                 revertIfEqual(operator, caller())
             }
 
-            function isApprvedForAll(account, operator) -> isApproved {
+            function isApprovedForAll(account, operator) -> isApproved {
                 isApproved := false
             }
             
+            /* Requires:
+            *  - `to` cannot be zero address
+            *  - if `caller` != `from`, check allowence
+            *  - `from` must have appropriate balance
+            *  - if `to` is a contract, check receiver 
+            */
             function safeTransferFrom(from, to, id, amount, data) {
                 revertIfZeroAddress(to)
+
+                if iszero(eq(caller(), from)) {
+                    if iszero(isApprovedForAll(from, caller())) {
+                        revert(0, 0)
+                    }
+                }
+                
+                revertIfInsuficientBalance(from, id, amount)
+                revertIfNonReceiverContract(to)
+
                 _transfer()
                 //pass appropriate args above
             }
@@ -203,6 +219,7 @@ object "1155" {
                 // log2(offset,size,topic1,topic2)
                 log2(0x00, x, signatureHash, id)
             }
+
 /*--------------Utils--------------------------------------------------------*/
             function revertIfZeroAddress(_address) {
                 if iszero(_address) {
@@ -220,6 +237,15 @@ object "1155" {
                 if eq(arg1, arg2) {
                     revert(0, 0)
                 }
+            }
+
+            function revertIfInsuficientBalance(from, id, amount) {
+
+            }
+
+
+            function revertIfNonReceiverContract(to) {
+
             }
         }
     }
