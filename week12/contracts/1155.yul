@@ -109,8 +109,7 @@ object "1155" {
             }
             
             function safeTransferFrom(from, to, id, amount, data) {
-                revertIfEqual(to, 0x0000000000000000000000000000000000000000)
-
+                revertIfZeroAddress(to)
                 _transfer()
                 //pass appropriate args above
             }
