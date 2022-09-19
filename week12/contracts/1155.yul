@@ -61,7 +61,7 @@ object "1155" {
                    decodeAsAddress(0),
                    decodeAsAddress(1),
                    decodeAsUintArr(2),
-                   decodeAsUint(3),
+                   decodeAsUintArr(3),
                    decodeAsBytes(4)
                 ) 
             }
@@ -78,7 +78,7 @@ object "1155" {
             function balanceOfBatch(addressArr, idArr) -> balanceArr {
                 //Define array to be appended to
 
-                for { let i := 1 } lt() {i = add(i, 1) } {
+                for { let i := 1 } lt() { i = add(i, 1) } {
                     val := _balanceOf( , )
 
                     //append val to correct array
@@ -98,6 +98,14 @@ object "1155" {
             
             function _safeTransferFrom(from, to, id, amount, data) {
 
+            }
+
+            function safeBatchTransferFrom(from, to, ids, amounts, data) {
+                
+                for { let i := 1 } lt() { i = add(i, 1) } {
+                    _safeTransferFrom()
+                    //increment counter
+                }
             }
 
 
