@@ -140,7 +140,6 @@ object "1155" {
                 mstore(0x00, id)
                 mstore(0x20, value)
 
-                // log4(offset,size,topic1,topic2,topic3,topic4)
                 log4(0x00, 0x40, signatureHash, operator, from, to)
             }
 
@@ -154,8 +153,9 @@ object "1155" {
             function emitApprovalForAll(account, operator, approved) {
                 let signatureHash := 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31
                 
-                // log3(offset,size,topic1,topic2,topic3)
-                log3(0x00, x, signatureHash, owner, operator)
+                mstore(0x00, approved) 
+
+                log3(0x00, 0x20, signatureHash, owner, operator)
             }
 
 
