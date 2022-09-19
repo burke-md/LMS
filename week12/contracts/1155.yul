@@ -12,6 +12,7 @@ object "1155" {
         datacopy(0, dataoffset("runtime"), datasize("runtime"))
         return(0, dataszie("runtime"))
     }
+
     object "runtime" {
         code {
 /*--------------Protect against sending Ether--------------------------------*/
@@ -21,12 +22,13 @@ object "1155" {
 
             // balanceOf(address,uint256)
             case 0x00fdd58e { 
-                return(balanceOf(decodeAsAddress(0), decodeAsUint(1))
+                return(_balanceOf(decodeAsAddress(0), decodeAsUint(1))
             }
 
             // balanbceOfBatch(address[],uint256[])
             case 0x4e1273f4 {
-
+                return(balanceOfBatch(decodeAsAddressArr(0), 
+                    decodeAsUintArr(1))
             }
 
             // setApprovalForAll(address,bool)
@@ -54,7 +56,18 @@ object "1155" {
             }
 
 /*--------------Functions for Dispatcher-------------------------------------*/
-            function balanceOf(account, id) -> {
+            function _balanceOf(account, id) -> {
+
+            }
+
+            function balanceOfBatch(addressArr, idArr) -> balanceArr {
+                //Define array to be appended to
+
+                for { let i := 1 } lt() {i = add(i, 1) } {
+                    val := _balanceOf( , )
+
+                    //append val to correct array
+                }
 
             }
 
@@ -67,7 +80,15 @@ object "1155" {
 
             }
 
-            function decodeAsUint(offset) -> {
+            function decodeAsAddressArr(offset) -> vArr {
+
+            }
+
+            function decodeAsUint(offset) -> v {
+
+            }
+
+            function decodeAsUintArr(offset) -> vArr {
 
             }
 /*--------------Calldata encoding--------------------------------------------*/
