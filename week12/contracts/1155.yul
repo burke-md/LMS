@@ -110,7 +110,8 @@ object "1155" {
 
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
-
+                s := div(calldataload(0), 
+                    0x10000000000000000000000000000000000000000000000) 
             }
 
             function decodeAsBytes(offset) -> {
@@ -118,7 +119,11 @@ object "1155" {
             }
 
             function decodeAsAddress(offset) -> v {
-
+                v := decodeAsUint(offset)
+                if iszero(iszero(and(v, 
+                    not(0xffffffffffffffffffffffffffffffffffffffff)))) {
+                        revert(0, 0)
+                }
             }
 
             function decodeAsAddressArr(offset) -> vArr {
@@ -126,7 +131,11 @@ object "1155" {
             }
 
             function decodeAsUint(offset) -> v {
-
+                let pos := add(4, mul(offset, 0x20))
+                if lt(calldatasize(), add(pos, 0x20)) {
+                    revert(0, 0)
+                }
+                v := calldataload(pos)
             }
 
             function decodeAsUintArr(offset) -> vArr {
