@@ -46,7 +46,7 @@ object "1155" {
 
             // safeTransferFrom(address,address,uint256,uint256,bytes)
             case 0xf242432a {
-                _safeTransferFrom(
+                safeTransferFrom(
                     decodeAsAddress(0),
                     decodeAsAddress(1),
                     decodeAsUint(2),
@@ -100,15 +100,17 @@ object "1155" {
 
             }
 
-            function setApprovalForAll(account, approved) {
-
+            function setApprovalForAll(operator, approved) {
+                revertIfEqual(operator, caller())
             }
 
             function isApprvedForAll(account, operator) -> isApproved {
                 isApproved := false
             }
             
-            function _safeTransferFrom(from, to, id, amount, data) {
+            function safeTransferFrom(from, to, id, amount, data) {
+                revertIfEqual(to, 0x0000000000000000000000000000000000000000)
+
                 _transfer()
                 //pass appropriate args above
             }
@@ -211,6 +213,12 @@ object "1155" {
 
             function revertIfNotEqual(arg1, arg2) {
                 if iszero(eq(arg1, arg2)) {
+                    revert(0, 0)
+                }
+            }
+
+            function revertIfEqual(arg1, arg2) {
+                if eq(arg1, arg2) {
                     revert(0, 0)
                 }
             }
