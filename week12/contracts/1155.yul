@@ -16,8 +16,11 @@ object "1155" {
     object "runtime" {
         code {
 /*--------------Protect against sending Ether--------------------------------*/
+
             require(iszero(calleValue()))
+
 /*--------------Dispatcher---------------------------------------------------*/
+
             switch selector()
 
             // balanceOf(address,uint256)
@@ -33,12 +36,12 @@ object "1155" {
 
             // setApprovalForAll(address,bool)
             case 0xa22cb465 {
-
+                setApprovalForAll(decodeAsAddress(0), decodeAsBool(1)
             }
 
             // isApprovedForAll(address,address)
             case 0xe985e9c5 {
-
+                return(isApprovedForAll(decodceAsAddress(0), decodeAsAddress(1))
             }
 
             // safeTransferFrom(address,address,uint256,uint256,bytes)
@@ -69,6 +72,16 @@ object "1155" {
                     //append val to correct array
                 }
 
+            }
+
+            function setApprovalForAll(account, approved) {
+
+            }
+
+            function isApprvedForAll(account, operator) {
+                isApproved := false
+
+                return isApproved
             }
 
 /*--------------Calldata decoding--------------------------------------------*/
