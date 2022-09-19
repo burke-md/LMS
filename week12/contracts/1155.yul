@@ -78,7 +78,18 @@ object "1155" {
                 v := 
             }
 
-            function balanceOfBatch(addressArr, idArr) -> balanceArr {
+            function balanceOfBatch(accounts, ids) -> balanceArr {
+
+                /* note:
+                *      The array args are pointers to memory slots, which show
+                *      the length. Location of array args must be calculated.
+                */
+
+                addressArrLen := mload(acounts)
+                idArrLen := mload(ids) 
+
+                revertIfNotEqual(addressArrLen, idArrLen)
+
                 balanceArr :=
 
                 for { let i := 1 } lt() { i = add(i, 1) } {
@@ -103,6 +114,16 @@ object "1155" {
             }
 
             function safeBatchTransferFrom(from, to, ids, amounts, data) {
+
+                /* note:
+                *      The array args are pointers to memory slots, which show
+                *      the length. Location of array args must be calculated.
+                */
+
+                idArrLen := mload(ids)
+                amountArrLen := mload(amounts) 
+
+                revertIfNotEqual(idArrLen, amountArrLen)
                 
                 for { let i := 1 } lt() { i = add(i, 1) } {
                     _transfer()
@@ -184,6 +205,12 @@ object "1155" {
 /*--------------Utils--------------------------------------------------------*/
             function revertIfZeroAddress(_address) {
                 if iszero(_address) {
+                    revert(0, 0)
+                }
+            }
+
+            function revertIfNotEqual(arg1, arg2) {
+                if iszero(eq(arg1, arg2)) {
                     revert(0, 0)
                 }
             }
