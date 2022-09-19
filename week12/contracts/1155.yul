@@ -137,8 +137,11 @@ object "1155" {
             function emitTransferSingle(operator, from, to, id, value) {
                 let signatureHash := 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62
 
+                mstore(0x00, id)
+                mstore(0x20, value)
+
                 // log4(offset,size,topic1,topic2,topic3,topic4)
-                log4(0x00, x, signatureHash, operator, from, to)
+                log4(0x00, 0x40, signatureHash, operator, from, to)
             }
 
             function emitTransferBatch(operator, from, to, ids, values) {
