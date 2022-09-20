@@ -103,9 +103,14 @@ object "1155" {
 
                 revertIfNotEqual(addressArrLen, idArrLen)
 
-                balanceArr :=
-
-                for { let i := 1 } lt() { i = add(i, 1) } {
+                /* Note:
+                *  Get pointer to free memory
+                *  Iterate through array of address
+                *  Grab account balance
+                *  Store balance in sequential memory 'push to array'
+                *  Return pointer to 'array'
+                */
+                for { let i := 1 } lt(i, add(addressArrLen, 1)) { i = add(i, 1) } {
                     val := _balanceOf( , )
 
                     //append val to correct array
