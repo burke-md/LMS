@@ -91,7 +91,7 @@ object "1155" {
             /* Requires:
             *  - 'accounts' and 'ids' must have same length
             */
-            function balanceOfBatch(accounts, ids) -> balanceArr {
+            function balanceOfBatch(accounts, ids) -> balanceArrayPointer {
 
                 /* Note:
                 *  The array args are pointers to memory slots, which show
@@ -104,18 +104,36 @@ object "1155" {
                 revertIfNotEqual(addressArrLen, idArrLen)
 
                 /* Note:
-                *  Get pointer to free memory
+                *  Get pointer to next free memory
                 *  Iterate through array of address
+                *  Locate account/id in memory based on `i` of iteration
                 *  Grab account balance
                 *  Store balance in sequential memory 'push to array'
                 *  Return pointer to 'array'
                 */
+
+                freeMemPointer := mload(0x00)
+
+                _balanceArrayPointer := freeMemPointer
+
+                // Store first item in array (length of array)
+                pushToMem(_balanceArrayPointer, addressArrLen)
+
                 for { let i := 1 } lt(i, add(addressArrLen, 1)) { i = add(i, 1) } {
-                    val := _balanceOf( , )
 
-                    //append val to correct array
+                    /* Where `accounts` is the pointer to the begining of the 
+                    *  accounts array, move forward in memory `i` x 32-byte 
+                    *  bocks. 32 base ten == 0x20
+                    */
+                    account := mload(add(accounts, mul(i, 0x20)))
+                    id := mload(add(ids, mul(i, 0x20)))
+
+                    accountBalance := balanecOf(account, id)
+
+                    pushToMem(mload(0x00), accountBalance)
+
                 }
-
+                balanceArrayPointer := _balanceArrayPointer
             }
 
             /* Requirements:
@@ -272,6 +290,10 @@ object "1155" {
 
             function hashTwo(arg1, arg2) -> h {
                 h:= 
+            }
+
+            function pushToMem(location, data) {
+            
             }
 
 /*--------------Getters------------------------------------------------------*/
