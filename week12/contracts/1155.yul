@@ -17,9 +17,11 @@ object "1155" {
         code {
 
 /*--------------Storage layout-----------------------------------------------*/
-            function ownerPos() -> p { p:= 0 }
+            function ownerPos() -> p { p := 0 }
 
-            function balancePos() -> p { p:= 1 }
+            function balancePos() -> p { p := 1 }
+
+            function approvalPos() -> p { p := 2 }
             
 /*--------------Protect against sending Ether--------------------------------*/
 
@@ -141,6 +143,13 @@ object "1155" {
             */
             function setApprovalForAll(operator, approved) {
                 revertIfEqual(operator, caller())
+
+                approvalPointer := getOperatorApprovalPointer(
+                    caller(), operator)
+                
+                sstore(approvalPointer, approved)
+
+                emitApprovedForAllEvent(caller(), operator, approved)
             }
 
             function isApprovedForAll(account, operator) -> isApproved {
@@ -306,6 +315,14 @@ object "1155" {
 
                 p := hashTwo(account, hachTwo(id, balancePos()))
 
+            }
+
+            function getOperatorApprovalPointer(account, operator) -> p {
+                /* mapping(account => mapping(operator => approved))
+                *
+                */keccak256(operator, (keccak256(account, approvalSlot))
+
+                p := hashTwo(operator, hashTwo(account, approvalPos()))
             }
         }
     }
