@@ -15,6 +15,12 @@ object "1155" {
 
     object "runtime" {
         code {
+
+/*--------------Storage layout-----------------------------------------------*/
+            function ownerPos() -> p { p:= 0 }
+
+            function balancePos() -> p { p:= 1 }
+            
 /*--------------Protect against sending Ether--------------------------------*/
 
             require(iszero(calleValue()))
@@ -77,8 +83,9 @@ object "1155" {
             */
             function balanceOf(account, id) -> v {
                 revertIfZeroAddress(account)
-
-                v := 
+                
+                balancePointer := getBalancePointer(account, id)
+                v := sload(balancePointer)
             }
             
             /* Requires:
@@ -255,6 +262,22 @@ object "1155" {
 
 
             function revertIfNonReceiverContract(to) {
+
+            }
+
+            function hashTwo(arg1, arg2) -> h {
+                h:= 
+            }
+
+/*--------------Getters------------------------------------------------------*/
+            function getBalancePointer(account, id) p -> {
+                /* balance = mapping(uint256 id => mapping(address account =>
+                *     uint256 balance))
+                *
+                *  keccak256(account, kecak256(id, balanceSlot))
+                */
+
+                p := hashTwo(account, hachTwo(id, balancePos()))
 
             }
         }
