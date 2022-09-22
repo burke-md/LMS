@@ -204,8 +204,7 @@ object "1155" {
             
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
-                s := div(calldataload(0), 
-                    0x10000000000000000000000000000000000000000000000) 
+                s := shr(calldataload(0), 0xE2)
             }
 
             function decodeAsBytes(offset) -> {
