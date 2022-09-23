@@ -163,7 +163,8 @@ object "1155" {
             /* Requires:
             *  - `to` cannot be zero address
             *  - if `caller` != `from`, check allowence
-            *  - `from` must have appropriate balance
+            *  - `from` must have appropriate balance(basic implementation will 
+            *     not check balance, rather bool value. All or nothing.
             *  - if `to` is a contract, check receiver 
             */
             function safeTransferFrom(from, to, id, amount, data) {
