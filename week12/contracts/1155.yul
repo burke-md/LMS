@@ -84,8 +84,10 @@ object "1155" {
             *  'account' cannot be the zero address
             */
             function balanceOf(account, id) -> v {
-                revertIfZeroAddress(account)
-                
+               /* Requirment to revert if zero address
+               *  is handled by 'decodeAsAddress' masking op
+               */
+
                 balancePointer := getBalancePointer(account, id)
                 v := sload(balancePointer)
             }
@@ -139,7 +141,7 @@ object "1155" {
             }
 
             /* Requirements:
-            *  - `operator` cannoth be the caller
+            *  - `operator` cannot be the caller
             */
             function setApprovalForAll(operator, approved) {
                 revertIfEqual(operator, caller())
@@ -163,7 +165,9 @@ object "1155" {
             *  - if `to` is a contract, check receiver 
             */
             function safeTransferFrom(from, to, id, amount, data) {
-                revertIfZeroAddress(to)
+               /* Requirment to revert if zero address
+               *  is handled by 'decodeAsAddress' masking op
+               */
 
                 if iszero(eq(caller(), from)) {
                     if iszero(isApprovedForAll(from, caller())) {
@@ -184,16 +188,20 @@ object "1155" {
             */  
             function safeBatchTransferFrom(from, to, ids, amounts, data) {
 
+               /* Requirment to revert if zero address
+               *  is handled by 'decodeAsAddress' masking op
+               */
+
                 /* Note:
                 *  The array args are pointers to memory slots, which show
                 *  the length. Location of array args must be calculated.
                 */
 
+
                 idArrLen := mload(ids)
                 amountArrLen := mload(amounts) 
 
                 revertIfNotEqual(idArrLen, amountArrLen)
-                revertIfZeroAddress(to)
 
                 for { let i := 1 } lt() { i = add(i, 1) } {
                     _transfer()
@@ -269,11 +277,6 @@ object "1155" {
             }
 
 /*--------------Utils--------------------------------------------------------*/
-            function revertIfZeroAddress(_address) {
-                if iszero(_address) {
-                    revert(0, 0)
-                }
-            }
 
             function revertIfNotEqual(arg1, arg2) {
                 if iszero(eq(arg1, arg2)) {
