@@ -116,7 +116,7 @@ object "1155" {
                 *  Return pointer to 'array'
                 */
 
-                freeMemPointer := mload(0x00)
+                freeMemPointer := mload(0x40)
 
                 _balanceArrayPointer := freeMemPointer
 
@@ -127,7 +127,7 @@ object "1155" {
 
                     /* Where `accounts` is the pointer to the begining of the 
                     *  accounts array, move forward in memory `i` x 32-byte 
-                    *  bocks. 32 base ten == 0x20
+                    *  blocks. 32 base ten == 0x20
                     */
                     account := mload(add(accounts, mul(i, 0x20)))
                     id := mload(add(ids, mul(i, 0x20)))
@@ -155,7 +155,9 @@ object "1155" {
             }
 
             function isApprovedForAll(account, operator) -> isApproved {
-                isApproved := false
+                approvalPointer := getOperatorApprovalPointer(
+                    account, operator)
+                isApproved := sload(approvalPointer)
             }
             
             /* Requires:
