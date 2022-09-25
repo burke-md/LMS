@@ -181,13 +181,13 @@ object "1155" {
                 revertIfInsuficientBalance(from, id, amount)
                 revertIfNonReceiverContract(to)
 
-                _transfer()
-                //pass appropriate args above
+                _transfer(from, to, id, amount)
             }
 
             /* Requirements:
             *  - `ids` and `amounts` must have same length
             *  - `to` must not be zero address
+            *  - if `to` is a contract, check receiver 
             */  
             function safeBatchTransferFrom(from, to, ids, amounts, data) {
 
@@ -199,18 +199,28 @@ object "1155" {
                 *  The array args are pointers to memory slots, which show
                 *  the length. Location of array args must be calculated.
                 */
-
-
                 idArrLen := mload(ids)
                 amountArrLen := mload(amounts) 
 
                 revertIfNotEqual(idArrLen, amountArrLen)
 
-                for { let i := 1 } lt() { i = add(i, 1) } {
-                    _transfer()
-                    //pass appropriate args above
-                    //increment counter
+                for { let i := 1 } lt(i, add(idArrLen, 1)) { i = add(i, 1) } {
+                    
+                    // Get info at correct index i
+                    id := mload(add(ids, mul(0x20, i)))
+                    amount := mload(add(amounts, mul(0x20, i)))
+
+                    revertIfInsuficientBalance(from, id, amount)
+                    revertIfNonReceiverContract(to)
+                    _transfer(from, to, id, amount)
                 }
+            }
+
+            /* Internal function called as helper
+            *  All requirments to be handled before calling
+            */
+            function _transfer(from, to, id, amount) {
+
             }
             
 /*--------------Calldata decoding--------------------------------------------*/
