@@ -182,6 +182,8 @@ object "1155" {
                 revertIfNonReceiverContract(to)
 
                 _transfer(from, to, id, amount)
+
+                emitTransferSingle(caller(), from, to, id, amount)
             }
 
             /* Requirements:
@@ -214,6 +216,8 @@ object "1155" {
                     revertIfNonReceiverContract(to)
                     _transfer(from, to, id, amount)
                 }
+                
+                emitTransferBatch(caller(), from, to, ids, amounts)
             }
 
             /* Internal function called as helper
@@ -221,6 +225,13 @@ object "1155" {
             */
             function _transfer(from, to, id, amount) {
 
+                fromBalancePointer := getBalancePointer(from, id)
+                fromBalanceValue := sload(fromBalancePointer)
+                sstore(fromBalancePointer, sub(fromBalanceValue, amount))
+
+                toBalancePointer := getBalancePointer(to, id)
+                toBalanceValue := sload(toBalancePointer)
+                sstore(toBalancePointer, add(toBalanceValue, amount))
             }
             
 /*--------------Calldata decoding--------------------------------------------*/
