@@ -285,7 +285,7 @@ object "1155" {
             }
 
             function decodeAsAddressArr(offset) -> vArr {
-
+                vArr := decodeAsArray(offset)
             }
 
             function decodeAsUint(offset) -> v {
@@ -297,9 +297,15 @@ object "1155" {
             }
 
             function decodeAsUintArr(offset) -> vArr {
+                vArr := decodeAsArray(offset)
+            }
+
+            /* Internal function called as helper
+            *  All requirments to be handled before calling
+            */
+            function _decodeAsArray(offset) -> arrayPointer {
 
             }
-/*--------------Calldata encoding--------------------------------------------*/
 /*--------------Events-------------------------------------------------------*/
             function emitTransferSingle(operator, from, to, id, value) {
                 let signatureHash := 0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62
