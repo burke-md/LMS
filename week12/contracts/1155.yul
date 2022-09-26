@@ -27,6 +27,19 @@ object "1155" {
 
             require(iszero(calleValue()))
 
+
+/*
+* TODO 
+* initialize free memory pointer
+* store uri data
+*/
+
+
+
+
+
+
+
 /*--------------Dispatcher---------------------------------------------------*/
 
             switch selector()
@@ -240,7 +253,27 @@ object "1155" {
             }
 
             function decodeAsBytes(offset) -> {
+                // First four bytes are for function selector
 
+                calldataPointer := add(4, mul(0x20, offset)
+                arg := calldataload(calldataPointer)
+                lenPointer := add(4, arg)
+                len := calldataload(lenPointer)
+
+                freeMemPointer :=  mload(0x40)
+                pushToMem(freeMemPointer, len) 
+
+                // Get number of slots required
+                slots := add(div(len, 0x20), 1)
+                
+                // Copy appropriate calldata to mem
+                calldatacopy(add(freeMemPointer, 0x20), 
+                    add(lenPointer, 0x20), slots)
+
+
+                // Incremenet free memory pointer
+                pushToMem(0x40, add(0x20, slots))
+                
             }
 
             function decodeAsAddress(offset) -> v {
