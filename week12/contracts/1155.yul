@@ -381,8 +381,12 @@ object "1155" {
                 h:= 
             }
 
+            /* This function will push a 32byte piece of data
+            *  to memory and then increment the free memory pointer
+            */
             function pushToMem(location, data) {
-            
+                mstore(location, data)
+                mstore(0x40, add(location, 0x20)
             }
 
 /*--------------Getters------------------------------------------------------*/
