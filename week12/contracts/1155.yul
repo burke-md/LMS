@@ -304,6 +304,21 @@ object "1155" {
             *  All requirments to be handled before calling
             */
             function _decodeAsArray(offset) -> arrayPointer {
+                // Get arg from call data
+                argPointer := add(4, mul(0x20, offset))
+                arg := calldataload(argPointer)
+                lenPointer := add(4, arg)
+                len := calldataload(lenPointer)
+
+                // Store length of array in memory at first avail slot
+                freeMemPointer := mload(0x40)
+                mstore(freeMemPointer, len)
+
+                // Copy array from calldata into memory after len
+                    calldatacopy(add(freeMemPointer, 0x20), add(lenPointer, 0x20),
+                        mul(len, 0x20))
+                // Increment freee memory pointer
+                    pushToMem(0x40, add(0x20, len)
 
             }
 /*--------------Events-------------------------------------------------------*/
