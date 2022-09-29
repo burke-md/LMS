@@ -4,10 +4,16 @@ object "1155" {
         /* constructor (creation code)
         *  
         *  Assign owner to storage slot 0
+        *  Push uri string length into slot
+        *  Push uri string (encoded) to storage
         *  Deploy runstime code
         */
 
         sstore(0, caller())
+
+        // URI string = https://example/{id}.json length 25(0x19) bytes
+        sstore(3, 0x19) 
+        sstore(4, 0x68747470733a2f2f6578616d706c652f7b69647d2e6a736f6e) 
 
         datacopy(0, dataoffset("runtime"), datasize("runtime"))
         return(0, dataszie("runtime"))
@@ -30,19 +36,11 @@ object "1155" {
 /*--------------Protect against sending Ether--------------------------------*/
 
             require(iszero(calleValue()))
-
-
 /*
 * TODO 
 * Handle erc165
 * Handle 1155receiver
-* store uri data
 */
-
-
-
-
-
 
 
 /*--------------Dispatcher---------------------------------------------------*/
