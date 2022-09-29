@@ -17,6 +17,10 @@ object "1155" {
         code {
 
 /*--------------Storage layout-----------------------------------------------*/
+
+            // Create free memory pointer
+            mstore(0x40, 0x60)
+
             function ownerPos() -> p { p := 0 }
 
             function balancePos() -> p { p := 1 }
@@ -30,7 +34,8 @@ object "1155" {
 
 /*
 * TODO 
-* initialize free memory pointer
+* Handle erc165
+* Handle 1155receiver
 * store uri data
 */
 
