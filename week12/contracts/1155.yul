@@ -195,9 +195,14 @@ object "1155" {
                 }
                 
                 revertIfInsuficientBalance(from, id, amount)
-                revertIfNonReceiverContract(to)
 
                 _transfer(from, to, id, amount)
+                
+                // Handle receiver for 'to' as contract
+                extSize := extcodesize(to)
+                if gt(extSize, 0) {
+                    callERC1155Received(from, to, id, amount, data)
+                }
 
                 emitTransferSingle(caller(), from, to, id, amount)
             }
@@ -229,10 +234,15 @@ object "1155" {
                     amount := mload(add(amounts, mul(0x20, i)))
 
                     revertIfInsuficientBalance(from, id, amount)
-                    revertIfNonReceiverContract(to)
                     _transfer(from, to, id, amount)
                 }
                 
+                // Handle receiver for 'to' as contract
+                extSize := extcodesize(to)
+                if gt(extSize, 0) {
+                    callERC1155BatchReceived(from, to, ids, amounts, data)
+                }
+
                 emitTransferBatch(caller(), from, to, ids, amounts)
             }
 
@@ -379,11 +389,6 @@ object "1155" {
                 }
             }
 
-
-            function revertIfNonReceiverContract(to) {
-
-            }
-
             function hashTwo(arg1, arg2) -> h {
                 // Store two args in memory, hash and return value
                 freeMemPointer := mload 0x40
@@ -405,6 +410,13 @@ object "1155" {
                 mstore(0x40, add(location, 0x20)
             }
 
+            function callERC1155BatchReceived(from, to, ids, amounts, data) {
+
+            }
+            
+            function callERC1155BReceived(from, to, ids, amounts, data) {
+
+            }
 /*--------------Getters------------------------------------------------------*/
             function getBalancePointer(account, id) p -> {
                 /* balance = mapping(uint256 id => mapping(address account =>
