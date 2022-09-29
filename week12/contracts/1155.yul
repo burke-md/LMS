@@ -382,7 +382,16 @@ object "1155" {
             }
 
             function hashTwo(arg1, arg2) -> h {
-                h:= 
+                // Store two args in memory, hash and return value
+                freeMemPointer := mload 0x40
+
+                pushToMem(freeMemPointer, arg1)
+                pushToMem(add(freeMemPointer, 0x20), arg2)
+
+                pushToMem(add(freeMemPointer, 0x40), keccak256(freeMemPointer,
+                    add(freeMemPointer,0x20)
+
+                h:= mload(add(freeMemPointer, 0x40))
             }
 
             /* This function will push a 32byte piece of data
