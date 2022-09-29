@@ -369,7 +369,11 @@ object "1155" {
             }
 
             function revertIfInsuficientBalance(from, id, amount) {
+                balance := sload(getBalancePointer(from, id)
 
+                if gt(amount, balance) {
+                    revert(0, 0)
+                }
             }
 
 
