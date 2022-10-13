@@ -42,7 +42,6 @@ object "1155" {
 * Handle 1155receiver
 */
 
-
 /*--------------Dispatcher---------------------------------------------------*/
 
             switch selector()
@@ -414,8 +413,64 @@ object "1155" {
 
             }
             
-            function callERC1155BReceived(from, to, ids, amounts, data) {
+            function callERC1155BReceived(from, to, id, amounts, data) {
+                freeMemPointer := mload(0x40)
+                //inputPointer := 
+                selector := shl(0xE0, 0xf23a6e61)
+                dataLen := mload(data)
 
+                //Push selector
+                mstore(freeMemPointer, selector)
+
+                // Push operator (free memory is now 4 bytes further)
+                mstore(add(freeMemPointer, 0x04), caller())
+
+                // Push from 
+                mstore(add(freeMemPointer, 0x24), from)
+
+                // Push id 
+                mstore(add(freeMemPointer, 0x44), id)
+
+                // Push amount
+                mstore(add(freeMemPointer, 0x64), amount)
+
+                // Push data offset 
+                mstore(add(freeMemPointer, 0x84), 0xA0)
+
+                // Push data length
+                mstore(add(freeMemPointer, 0xA4), add(div(dataLen, 0x20), 1))
+
+                // Push data (if exists)
+
+                if dataLen {
+                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i = add(i, 1) }
+                    {
+                        _data := mload(add(data, mul(i, 0x20)))
+                        mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
+                    }
+                }
+
+                // Make call
+
+                success := call(
+                    gas(),
+                    to,
+                    0,
+                    freeMemPointer,
+                    add(0xc4, mul(dataLen, 0x20)),
+                    mload(0x40),
+                    0x20
+                )
+
+                if iszero(success) {
+                    revert(0,0)
+                }
+
+                res := mload(mload(0x40))
+
+                if iszero(eq(res, selector)) {
+                    revert(0,0)
+                }
             }
 /*--------------Getters------------------------------------------------------*/
             function getBalancePointer(account, id) p -> {
