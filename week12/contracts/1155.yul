@@ -22,7 +22,6 @@ object "1155" {
     object "runtime" {
         code {
 
-/*--------------Storage layout-----------------------------------------------*/
 
             // Create free memory pointer
             mstore(0x40, 0x60)
@@ -33,13 +32,14 @@ object "1155" {
 
             function approvalPos() -> p { p := 2 }
             
+            function uriLenPos() -> p { p := 3 }
+
 /*--------------Protect against sending Ether--------------------------------*/
 
             require(iszero(calleValue()))
 /*
 * TODO 
-* Handle erc165
-* Handle 1155receiver
+* uri function
 */
 
 /*--------------Dispatcher---------------------------------------------------*/
@@ -87,6 +87,35 @@ object "1155" {
                    decodeAsUintArr(3),
                    decodeAsBytes(4)
                 ) 
+            }
+
+            // uri(uint256)
+            case 0x0E89341C {
+                getUri()
+            }
+
+            // mint(address,uint256,uint256,bytes)
+            case 0x731133E9 {
+                mint(decodeAsAddress(0), decodeAsUint(1), decodeAsUint(2), decodeAsBytes(3))
+            }
+
+            // mintBatch(address,uint256[],uint256[],bytes)
+            case 0x1F7FDFFA {
+                mintBatch(
+                    decodeAsAddress(0),
+                    decodeAsUintArr(1),
+                    decodeAsUintArr(2),
+                    decodeAsBytes(3)
+                )
+            }
+
+            // burn(address, uint256,uint256)
+            case 0xF5298ACA {
+                burn(decodeAsAddress(0), decodeAsUint(1), decodeAsUint(2))
+            }
+
+            // burnBatch(address,uint256[],uint256[])
+                burnBatch(decodeAsAddress(0), decodeAsUintArr(1), decodeAsUintArr(2))
             }
 
             default {
@@ -259,6 +288,75 @@ object "1155" {
                 sstore(toBalancePointer, add(toBalanceValue, amount))
             }
             
+            /*
+            *
+            */
+            function getUri() {
+                uriLen := sload(uriLenPos())
+
+                freeMemPointer := mload(0x40)
+
+                // Push uri string offset
+                mstore(freeMemPointer, 0x20)
+
+                // Push uri string length
+                mstore(add(freeMemPointer, 0x20), uriLen)
+
+                // Push string 
+                for (let := i } lt(i, add(2, div(uriLen, 0x20))) { i = add(i, 1) }
+                {
+                    // Handle multi slot length uri strings
+                    slot := add(uriLen, i)
+                    data := sload(slot)
+
+                    mstore(add(mul(i, 0x20), add(freeMemPointer, 0x40), data)
+                }
+                // string offset, data
+                return(0x00, add(mul(uriLen, 0x20), freeMemPointer)))
+            }
+
+
+            /*
+            *
+            */
+            function mint() {
+
+            }
+
+                
+            /*
+            *
+            */
+            function mintBatch() {
+
+            }
+
+
+            /*
+            * Internal helper
+            * Will revert if minting to zero address (decodeAsAddress masking op)
+            */
+            function _mint(to, id, amount, data) {
+                accountBalanceKey := getBalancePointer(to, id)
+                balance := sload(accountBalanceKey)
+
+                sstore(accountBalanceKey, add(balance, amount))
+            }
+
+            /*
+            *
+            */
+            function burn() {
+
+            }
+
+
+            /*
+            *
+            */
+            function burnBatch() {
+
+            }
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
                 s := shr(calldataload(0), 0xE2)
