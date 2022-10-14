@@ -410,7 +410,92 @@ object "1155" {
             }
 
             function callERC1155BatchReceived(from, to, ids, amounts, data) {
+                freeMemPointer := mload(0x40)
+                selector := shl(0xE0, 0xBC197C81)
+                idsLen := mload(ids)
+                dataLen := mload(data)
 
+                //Push selector
+                mstore(freeMemPointer, selector)
+
+                // Push operator (free memory is now 4 bytes further)
+                mstore(add(freeMemPointer, 0x04), caller())
+
+                // Push from 
+                mstore(add(freeMemPointer, 0x24), from)
+
+                // Push ids offset
+                mstore(add(freeMemPointer, 0x44), 0xA0)
+
+                // Push amounts offset
+                valuesArrOffset := add(add(0xa0, 0x20), mul(ids, 0x20))
+                mstore(add(freeMemPointer, 0x64), valuesArrOffset)
+
+                // Push data offset 
+                dataArrOffset := add(add(valuesArrOffset, 0x20), mul(idsLen, 0x20))
+                mstore(add(freeMemPointer, 0x84), dataArrOffset)
+
+                // Push ids length 
+                idsArrLenPointer := add(freeMemPointer, 0xA4)
+                mstore(idsArrLenPointer, idsLen)
+
+                // Store ids in mem
+
+                if idsLen {
+                    for { let i := 1 } lt(i, add(1, idsLen)) { i = add(i, 1) }
+                    {
+                        _data := mload(add(idsArrLenPointer, mul(i, 0x20)))
+                        mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
+                    }
+                }    
+                amountsArrLenPointer := add(add(ids, 0x20), mul(idsLen, 0x20))
+                mstore(amountsArrLenPointer, idsLen)
+                
+                // Store amounts in mem
+
+                if idsLen {
+                    for { let i := 1 } lt(i, add(1, idsLen)) { i = add(i, 1) }
+                    {
+                        _data := mload(add(amountsArrLenPointer, mul(i, 0x20)))
+                        mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
+                    }
+                }    
+
+                // Store data in mem
+
+                dataArrLenPointer := add(add(amountsArrLenPointer, 0x20), mull(idsLen, 0x20)), 0x20)
+                mstore(dataArrLenPointer, add(1, div(dataLen, 0x20))
+
+                if dataLen {
+                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i = add(i, 1) }
+                    {
+                        _data := mload(add(data, mul(i, 0x20)))
+                        mstore(add(dataLen, mul(i, 0x20)), _data)
+                    }
+                }    
+
+                success := call(
+                    gas(),
+                    to,
+                    0,
+                    freeMemPointer,
+                    add(
+                        add(0xA4, mul(2, add(0x20, mul(idsArrLenPointer, 0x20)))),
+                        add(0x40, mul(0x20, div(dataLen, 0x20)))
+                    ),
+                    freeMemPointer,
+                    0x20
+                )
+
+                if iszero(success) {
+                    revert(0,0)
+                }
+
+                res := mload(freeMemPointer)
+
+                if iszero(eq(res, selector)) {
+                    revert(0,0)
+                }
             }
             
             function callERC1155BReceived(from, to, id, amounts, data) {
