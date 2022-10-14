@@ -316,19 +316,34 @@ object "1155" {
             }
 
 
-            /*
-            *
-            */
-            function mint() {
+            function mint(to, id, amount, data) {
+                _mint(to, id, amount)
 
+                emitTransferSingle(caller(), 0x00, to, id, amount)
             }
 
                 
-            /*
-            *
-            */
-            function mintBatch() {
+            function mintBatch(to, ids, amounts, data) {
+                idArrLen := mload(ids)
+                amountArrLen := mload(amounts)
 
+                revertIfNotEqual(idArrLen, amountArrLen)
+
+                for { let i := 1 } lt(i, add(idArrLen, 1) {i = add(i, 1) {
+                {
+                    id := mload(add(ids, mul(i, 0x20))
+                    amount := mload(add(amounts, mul(i, 0x20)))
+
+                    _mint(to, id, amount)
+                }
+
+                emitTransferBatch(
+                    caller(),
+                    0x00,
+                    to,
+                    ids,
+                    amounts
+                )
             }
 
 
@@ -336,7 +351,7 @@ object "1155" {
             * Internal helper
             * Will revert if minting to zero address (decodeAsAddress masking op)
             */
-            function _mint(to, id, amount, data) {
+            function _mint(to, id, amount) {
                 accountBalanceKey := getBalancePointer(to, id)
                 balance := sload(accountBalanceKey)
 
