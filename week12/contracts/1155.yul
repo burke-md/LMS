@@ -127,7 +127,7 @@ object "1155" {
                *  is handled by 'decodeAsAddress' masking op
                */
 
-                balancePointer := getBalancePointer(account, id)
+                let balancePointer := getBalancePointer(account, id)
                 v := sload(balancePointer)
             }
             
@@ -141,8 +141,8 @@ object "1155" {
                 *  the length. Location of array args must be calculated.
                 */
 
-                addressArrLen := mload(acounts)
-                idArrLen := mload(ids) 
+                let addressArrLen := mload(acounts)
+                let idArrLen := mload(ids) 
 
                 revertIfNotEqual(addressArrLen, idArrLen)
 
@@ -155,23 +155,23 @@ object "1155" {
                 *  Return pointer to 'array'
                 */
 
-                freeMemPointer := mload(0x40)
+                let freeMemPointer := mload(0x40)
 
-                _balanceArrayPointer := freeMemPointer
+                let _balanceArrayPointer := freeMemPointer
 
                 // Store first item in array (length of array)
                 pushToMem(_balanceArrayPointer, addressArrLen)
 
-                for { let i := 1 } lt(i, add(addressArrLen, 1)) { i = add(i, 1) } {
+                for { let i := 1 } lt(i, add(addressArrLen, 1)) { i := add(i, 1) } {
 
                     /* Where `accounts` is the pointer to the begining of the 
                     *  accounts array, move forward in memory `i` x 32-byte 
                     *  blocks. 32 base ten == 0x20
                     */
-                    account := mload(add(accounts, mul(i, 0x20)))
-                    id := mload(add(ids, mul(i, 0x20)))
+                    let account := mload(add(accounts, mul(i, 0x20)))
+                    let id := mload(add(ids, mul(i, 0x20)))
 
-                    accountBalance := balanecOf(account, id)
+                    let accountBalance := balanecOf(account, id)
 
                     pushToMem(mload(0x00), accountBalance)
 
@@ -185,7 +185,7 @@ object "1155" {
             function setApprovalForAll(operator, approved) {
                 revertIfEqual(operator, caller())
 
-                approvalPointer := getOperatorApprovalPointer(
+                let approvalPointer := getOperatorApprovalPointer(
                     caller(), operator)
                 
                 sstore(approvalPointer, approved)
@@ -194,7 +194,7 @@ object "1155" {
             }
 
             function isApprovedForAll(account, operator) -> isApproved {
-                approvalPointer := getOperatorApprovalPointer(
+                let approvalPointer := getOperatorApprovalPointer(
                     account, operator)
                 isApproved := sload(approvalPointer)
             }
@@ -222,7 +222,7 @@ object "1155" {
                 _transfer(from, to, id, amount)
                 
                 // Handle receiver for 'to' as contract
-                extSize := extcodesize(to)
+                let extSize := extcodesize(to)
                 if gt(extSize, 0) {
                     callERC1155Received(from, to, id, amount, data)
                 }
@@ -245,23 +245,23 @@ object "1155" {
                 *  The array args are pointers to memory slots, which show
                 *  the length. Location of array args must be calculated.
                 */
-                idArrLen := mload(ids)
-                amountArrLen := mload(amounts) 
+                let idArrLen := mload(ids)
+                let amountArrLen := mload(amounts) 
 
                 revertIfNotEqual(idArrLen, amountArrLen)
 
-                for { let i := 1 } lt(i, add(idArrLen, 1)) { i = add(i, 1) } {
+                for { let i := 1 } lt(i, add(idArrLen, 1)) { i := add(i, 1) } {
                     
                     // Get info at correct index i
-                    id := mload(add(ids, mul(0x20, i)))
-                    amount := mload(add(amounts, mul(0x20, i)))
+                    let id := mload(add(ids, mul(0x20, i)))
+                    let amount := mload(add(amounts, mul(0x20, i)))
 
                     revertIfInsuficientBalance(from, id, amount)
                     _transfer(from, to, id, amount)
                 }
                 
                 // Handle receiver for 'to' as contract
-                extSize := extcodesize(to)
+                let extSize := extcodesize(to)
                 if gt(extSize, 0) {
                     callERC1155BatchReceived(from, to, ids, amounts, data)
                 }
@@ -274,12 +274,12 @@ object "1155" {
             */
             function _transfer(from, to, id, amount) {
 
-                fromBalancePointer := getBalancePointer(from, id)
-                fromBalanceValue := sload(fromBalancePointer)
+                let fromBalancePointer := getBalancePointer(from, id)
+                let fromBalanceValue := sload(fromBalancePointer)
                 sstore(fromBalancePointer, sub(fromBalanceValue, amount))
 
-                toBalancePointer := getBalancePointer(to, id)
-                toBalanceValue := sload(toBalancePointer)
+                let toBalancePointer := getBalancePointer(to, id)
+                let toBalanceValue := sload(toBalancePointer)
                 sstore(toBalancePointer, add(toBalanceValue, amount))
             }
             
@@ -287,9 +287,9 @@ object "1155" {
             *
             */
             function getUri() {
-                uriLen := sload(uriLenPos())
+                let uriLen := sload(uriLenPos())
 
-                freeMemPointer := mload(0x40)
+                let freeMemPointer := mload(0x40)
 
                 // Push uri string offset
                 mstore(freeMemPointer, 0x20)
@@ -298,11 +298,11 @@ object "1155" {
                 mstore(add(freeMemPointer, 0x20), uriLen)
 
                 // Push string 
-                for (let := i } lt(i, add(2, div(uriLen, 0x20))) { i = add(i, 1) }
+                for (let := i } lt(i, add(2, div(uriLen, 0x20))) { i := add(i, 1) }
                 {
                     // Handle multi slot length uri strings
-                    slot := add(uriLen, i)
-                    data := sload(slot)
+                    let slot := add(uriLen, i)
+                    let data := sload(slot)
 
                     mstore(add(mul(i, 0x20), add(freeMemPointer, 0x40), data)
                 }
@@ -319,15 +319,15 @@ object "1155" {
 
                 
             function mintBatch(to, ids, amounts, data) {
-                idArrLen := mload(ids)
-                amountArrLen := mload(amounts)
+                let idArrLen := mload(ids)
+                let amountArrLen := mload(amounts)
 
                 revertIfNotEqual(idArrLen, amountArrLen)
 
-                for { let i := 1 } lt(i, add(idArrLen, 1) {i = add(i, 1) {
+                for { let i := 1 } lt(i, add(idArrLen, 1) {i := add(i, 1) {
                 {
-                    id := mload(add(ids, mul(i, 0x20))
-                    amount := mload(add(amounts, mul(i, 0x20)))
+                    let id := mload(add(ids, mul(i, 0x20))
+                    let amount := mload(add(amounts, mul(i, 0x20)))
 
                     _mint(to, id, amount)
                 }
@@ -347,8 +347,8 @@ object "1155" {
             * Will revert if minting to zero address (decodeAsAddress masking op)
             */
             function _mint(to, id, amount) {
-                accountBalanceKey := getBalancePointer(to, id)
-                balance := sload(accountBalanceKey)
+                let accountBalanceKey := getBalancePointer(to, id)
+                let balance := sload(accountBalanceKey)
 
                 sstore(accountBalanceKey, add(balance, amount))
             }
@@ -360,14 +360,14 @@ object "1155" {
             }
 
             function burnBatch(from, ids, amounts) {
-                idArrLen := mload(ids)
-                amountArrLen := mload(amounts)
+                let idArrLen := mload(ids)
+                let amountArrLen := mload(amounts)
 
                 revertIfNotEqual(idArrLen, amountArrLen)
 
-                for { let i := 1 } lt(i, add(idArrLen, 1)) { i = add(i, 1) } 
+                for { let i := 1 } lt(i, add(idArrLen, 1)) { i := add(i, 1) } 
                 { 
-                    id := mload(add(
+                    let id := mload(add(
 
 
 
@@ -382,8 +382,8 @@ object "1155" {
             * Will revert if burning from zero address (decodeAsAddress masking op)
             */
             function _burn(from, id, amount) {
-                accountBalanceKey := getBalancePointer(from, id) 
-                balance := sload(accountBalanceKey)
+                let accountBalanceKey := getBalancePointer(from, id) 
+                let balance := sload(accountBalanceKey)
 
                 revertIfInsuficientBalance(from, id, amount)
 
@@ -394,19 +394,19 @@ object "1155" {
                 s := shr(calldataload(0), 0xE2)
             }
 
-            function decodeAsBytes(offset) -> {
+            function decodeAsBytes(offset) {
                 // First four bytes are for function selector
 
-                calldataPointer := add(4, mul(0x20, offset)
-                arg := calldataload(calldataPointer)
-                lenPointer := add(4, arg)
-                len := calldataload(lenPointer)
+                let calldataPointer := add(4, mul(0x20, offset)
+                let arg := calldataload(calldataPointer)
+                let lenPointer := add(4, arg)
+                let len := calldataload(lenPointer)
 
-                freeMemPointer :=  mload(0x40)
+                let freeMemPointer :=  mload(0x40)
                 pushToMem(freeMemPointer, len) 
 
                 // Get number of slots required
-                slots := add(div(len, 0x20), 1)
+                let slots := add(div(len, 0x20), 1)
                 
                 // Copy appropriate calldata to mem
                 calldatacopy(add(freeMemPointer, 0x20), 
@@ -447,13 +447,13 @@ object "1155" {
             */
             function _decodeAsArray(offset) -> arrayPointer {
                 // Get arg from call data
-                argPointer := add(4, mul(0x20, offset))
-                arg := calldataload(argPointer)
-                lenPointer := add(4, arg)
-                len := calldataload(lenPointer)
+                let argPointer := add(4, mul(0x20, offset))
+                let arg := calldataload(argPointer)
+                let lenPointer := add(4, arg)
+                let len := calldataload(lenPointer)
 
                 // Store length of array in memory at first avail slot
-                freeMemPointer := mload(0x40)
+                let freeMemPointer := mload(0x40)
                 mstore(freeMemPointer, len)
 
                 // Copy array from calldata into memory after len
@@ -511,7 +511,7 @@ object "1155" {
             }
 
             function revertIfInsuficientBalance(from, id, amount) {
-                balance := sload(getBalancePointer(from, id)
+                let balance := sload(getBalancePointer(from, id)
 
                 if gt(amount, balance) {
                     revert(0, 0)
@@ -520,7 +520,7 @@ object "1155" {
 
             function hashTwo(arg1, arg2) -> h {
                 // Store two args in memory, hash and return value
-                freeMemPointer := mload 0x40
+                let freeMemPointer := mload 0x40
 
                 pushToMem(freeMemPointer, arg1)
                 pushToMem(add(freeMemPointer, 0x20), arg2)
@@ -528,7 +528,7 @@ object "1155" {
                 pushToMem(add(freeMemPointer, 0x40), keccak256(freeMemPointer,
                     add(freeMemPointer,0x20)
 
-                h:= mload(add(freeMemPointer, 0x40))
+                h := mload(add(freeMemPointer, 0x40))
             }
 
             /* This function will push a 32byte piece of data
@@ -540,10 +540,10 @@ object "1155" {
             }
 
             function callERC1155BatchReceived(from, to, ids, amounts, data) {
-                freeMemPointer := mload(0x40)
-                selector := shl(0xE0, 0xBC197C81)
-                idsLen := mload(ids)
-                dataLen := mload(data)
+                let freeMemPointer := mload(0x40)
+                let selector := shl(0xE0, 0xBC197C81)
+                let idsLen := mload(ids)
+                let dataLen := mload(data)
 
                 //Push selector
                 mstore(freeMemPointer, selector)
@@ -558,53 +558,54 @@ object "1155" {
                 mstore(add(freeMemPointer, 0x44), 0xA0)
 
                 // Push amounts offset
-                valuesArrOffset := add(add(0xa0, 0x20), mul(ids, 0x20))
+                let valuesArrOffset := add(add(0xa0, 0x20), mul(ids, 0x20))
                 mstore(add(freeMemPointer, 0x64), valuesArrOffset)
 
                 // Push data offset 
-                dataArrOffset := add(add(valuesArrOffset, 0x20), mul(idsLen, 0x20))
+                let dataArrOffset := add(add(valuesArrOffset, 0x20), mul(idsLen, 0x20))
                 mstore(add(freeMemPointer, 0x84), dataArrOffset)
 
                 // Push ids length 
-                idsArrLenPointer := add(freeMemPointer, 0xA4)
+                let idsArrLenPointer := add(freeMemPointer, 0xA4)
                 mstore(idsArrLenPointer, idsLen)
 
                 // Store ids in mem
 
                 if idsLen {
-                    for { let i := 1 } lt(i, add(1, idsLen)) { i = add(i, 1) }
+                    for { let i := 1 } lt(i, add(1, idsLen)) { i := add(i, 1) }
                     {
-                        _data := mload(add(idsArrLenPointer, mul(i, 0x20)))
+                        let _data := mload(add(idsArrLenPointer, mul(i, 0x20)))
                         mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
                     }
                 }    
-                amountsArrLenPointer := add(add(ids, 0x20), mul(idsLen, 0x20))
+
+                let amountsArrLenPointer := add(add(ids, 0x20), mul(idsLen, 0x20))
                 mstore(amountsArrLenPointer, idsLen)
                 
                 // Store amounts in mem
 
                 if idsLen {
-                    for { let i := 1 } lt(i, add(1, idsLen)) { i = add(i, 1) }
+                    for { let i := 1 } lt(i, add(1, idsLen)) { i := add(i, 1) }
                     {
-                        _data := mload(add(amountsArrLenPointer, mul(i, 0x20)))
+                        let _data := mload(add(amountsArrLenPointer, mul(i, 0x20)))
                         mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
                     }
                 }    
 
                 // Store data in mem
 
-                dataArrLenPointer := add(add(amountsArrLenPointer, 0x20), mull(idsLen, 0x20)), 0x20)
+                let dataArrLenPointer := add(add(amountsArrLenPointer, 0x20), mull(idsLen, 0x20)), 0x20)
                 mstore(dataArrLenPointer, add(1, div(dataLen, 0x20))
 
                 if dataLen {
-                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i = add(i, 1) }
+                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i := add(i, 1) }
                     {
-                        _data := mload(add(data, mul(i, 0x20)))
+                        let _data := mload(add(data, mul(i, 0x20)))
                         mstore(add(dataLen, mul(i, 0x20)), _data)
                     }
                 }    
 
-                success := call(
+                let success := call(
                     gas(),
                     to,
                     0,
@@ -621,7 +622,7 @@ object "1155" {
                     revert(0,0)
                 }
 
-                res := mload(freeMemPointer)
+                let res := mload(freeMemPointer)
 
                 if iszero(eq(res, selector)) {
                     revert(0,0)
@@ -629,10 +630,10 @@ object "1155" {
             }
             
             function callERC1155BReceived(from, to, id, amounts, data) {
-                freeMemPointer := mload(0x40)
+                let freeMemPointer := mload(0x40)
                 //inputPointer := 
-                selector := shl(0xE0, 0xf23a6e61)
-                dataLen := mload(data)
+                let selector := shl(0xE0, 0xf23a6e61)
+                let dataLen := mload(data)
 
                 //Push selector
                 mstore(freeMemPointer, selector)
@@ -658,16 +659,16 @@ object "1155" {
                 // Push data (if exists)
 
                 if dataLen {
-                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i = add(i, 1) }
+                    for { let i := 1 } lt(i, add(2, div(dataLen, 0x20))) { i := add(i, 1) }
                     {
-                        _data := mload(add(data, mul(i, 0x20)))
+                        let _data := mload(add(data, mul(i, 0x20)))
                         mstore(add(add(freeMemPointer, 0xA4), mul(i, 0x20)), _data)
                     }
                 }
 
                 // Make call
 
-                success := call(
+                let success := call(
                     gas(),
                     to,
                     0,
@@ -681,7 +682,7 @@ object "1155" {
                     revert(0,0)
                 }
 
-                res := mload(mload(0x40))
+                let res := mload(mload(0x40))
 
                 if iszero(eq(res, selector)) {
                     revert(0,0)
