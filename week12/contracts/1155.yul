@@ -22,7 +22,6 @@ object "1155" {
     object "runtime" {
         code {
 
-
             // Create free memory pointer
             mstore(0x40, 0x60)
 
@@ -37,10 +36,6 @@ object "1155" {
 /*--------------Protect against sending Ether--------------------------------*/
 
             require(iszero(calleValue()))
-/*
-* TODO 
-* uri function
-*/
 
 /*--------------Dispatcher---------------------------------------------------*/
 
@@ -358,19 +353,41 @@ object "1155" {
                 sstore(accountBalanceKey, add(balance, amount))
             }
 
-            /*
-            *
-            */
-            function burn() {
+            function burn(from, id, amount) {
+                _burn(from, id, amount)
+
+                emitTransferSingle(caller(), from, 0x00, id, amount)
+            }
+
+            function burnBatch(from, ids, amounts) {
+                idArrLen := mload(ids)
+                amountArrLen := mload(amounts)
+
+                revertIfNotEqual(idArrLen, amountArrLen)
+
+                for { let i := 1 } lt(i, add(idArrLen, 1)) { i = add(i, 1) } 
+                { 
+                    id := mload(add(
+
+
+
+                    ///// COMPLETE THIS LOGIC 
+
+
 
             }
 
-
             /*
-            *
+            * Internal helper
+            * Will revert if burning from zero address (decodeAsAddress masking op)
             */
-            function burnBatch() {
+            function _burn(from, id, amount) {
+                accountBalanceKey := getBalancePointer(from, id) 
+                balance := sload(accountBalanceKey)
 
+                revertIfInsuficientBalance(from, id, amount)
+
+                sstore(accountBalanceKey, sub(balance, amount))
             }
 /*--------------Calldata decoding--------------------------------------------*/
             function selector() -> s {
