@@ -368,13 +368,9 @@ object "1155" {
                 for { let i := 1 } lt(i, add(idArrLen, 1)) { i := add(i, 1) } 
                 { 
                     let id := mload(add(
+                    let amount := mload(add(ids, mul(i, 0x20)))
 
-
-
-                    ///// COMPLETE THIS LOGIC 
-
-
-
+                    _burn(from, id, amount)
             }
 
             /*
