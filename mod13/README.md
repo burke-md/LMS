@@ -1,5 +1,11 @@
 # Clone
 
+## Gas costs
+```shell
+Deploying Clones contract               :
+Deploying ERC20 StandardToken contract  :
+Calling Clones to redeploy StandardToken:
+```
 
 ```shell
 npx hardhat help
