@@ -12,12 +12,13 @@ contract StandardToken is Initializable, ERC20Upgradeable, OwnableUpgradeable, U
         _disableInitializers();
     }
 
-    function initialize() initializer public {
-        __ERC20_init("StandardToken", "STD");
+    function initialize(uint256 _initialSupply, string calldata _name, string calldata _symbol, address _newOwner) initializer public {
+        __ERC20_init(_name, _symbol);
         __Ownable_init();
         __UUPSUpgradeable_init();
 
-        _mint(msg.sender, 50_000 * 10 ** decimals());
+        _mint(msg.sender, _initialSupply);
+        transferOwnership(_newOwner);
     }
 
     function _authorizeUpgrade(address newImplementation)
@@ -25,10 +26,6 @@ contract StandardToken is Initializable, ERC20Upgradeable, OwnableUpgradeable, U
         onlyOwner
         override
     {}
-
-    function addFive(uint256 _num) external pure returns(uint256) {
-        return _num + 5;
-    }
 
     function slotZero() external view returns(bytes memory) {
         bytes memory slotZero;

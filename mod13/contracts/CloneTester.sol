@@ -8,8 +8,9 @@ contract CloneTester {
         token = _address;
     }
 
-    function setInitializer() external returns(bytes memory){
-        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("initialize()"));
+    function callInitializer(uint256 _numTokens, string calldata _name, string calldata _symbol) external returns(bytes memory){
+        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("initialize(uint256,string,string,address)",
+             _numTokens, _name, _symbol, msg.sender));
         return data;
     }
 
@@ -18,7 +19,7 @@ contract CloneTester {
         return data;
     }
 
-    function getTicker() external returns(bytes memory){
+    function getSymbol() external returns(bytes memory){
         (bool success, bytes memory data) = token.call(abi.encodeWithSignature("symbol()"));
         return data;
     }
@@ -29,7 +30,7 @@ contract CloneTester {
     }
 
     function getSupply() external returns(bytes memory){
-        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("totalSupply())"));
+        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("totalSupply()"));
         return data;
     }
 

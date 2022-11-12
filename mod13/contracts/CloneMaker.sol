@@ -11,12 +11,4 @@ contract CloneMaker {
     function createClone(address _implementation) external returns(address) {
         return Clones.clone(_implementation);
     }
-
-    function contractSize(address _address) external view returns (uint) {
-        uint32 size;
-        assembly {
-            size := extcodesize(_address)
-        }
-        return size;
-    }
 }
