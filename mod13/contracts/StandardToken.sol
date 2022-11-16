@@ -26,12 +26,4 @@ contract StandardToken is Initializable, ERC20Upgradeable, OwnableUpgradeable, U
         onlyOwner
         override
     {}
-
-    function slotZero() external view returns(bytes memory) {
-        bytes memory slotZero;
-           assembly {
-            slotZero := sload(0x00)
-        }
-        return slotZero;
-    }
 }
