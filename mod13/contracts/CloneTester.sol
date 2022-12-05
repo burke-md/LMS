@@ -33,14 +33,4 @@ contract CloneTester {
         (bool success, bytes memory data) = token.call(abi.encodeWithSignature("totalSupply()"));
         return data;
     }
-
-    function testAddFive(uint256 _num) external returns(bytes memory) {
-        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("addFive(uint256)", _num));
-        return data;
-    }
-
-    function getSlotZeroZ() external returns(bytes memory) {
-        (bool success, bytes memory data) = token.call(abi.encodeWithSignature("slotZero()"));
-        return data;
-    }
 }
