@@ -5,7 +5,7 @@ This project will fulfill the following criteria:
 - [x] The nft will not be free
 - [ ] The nft address will have at least 6 leading zeros
 - [x] Users will be able to mint one token based on a merkle tree access list(mapping)
-    - [ ] Bench mark the merkle tree w/ bool mapping quantity limitation
+    - [x] Bench mark the merkle tree w/ bool mapping quantity limitation
 - [ ] Users will be able to mint one token based on a merkle tree access list(bitmap)
     - [ ] Bench merk the merkle tree w/ bitmapping quantity limitation
 - [ ] Contracts will be prevented from minting (minter must be EOA)
