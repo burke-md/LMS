@@ -2,18 +2,25 @@
 pragma solidity 0.8.17;
 
 // import "hardhat/console.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
-contract NftWrapper {
+contract NftWrapper is Ownable {
     
-    address immutable erc721TokenAdrress;
-    address immutable erc1155TokenAddress;
+    IERC721 immutable erc721Token;
+    IERC1155 immutable erc1155Token;
 
-    constructor(address _erc721TokenAdrress, _erc1155TokenAddress) {
-        erc721TokenAdrress = _erc721TokenAdrress;
-        erc1155TokenAddress = _erc1155TokenAddress;
+    constructor(address _erc721TokenAdrress, address _erc1155TokenAddress) {
+        erc721Token = _erc721TokenAdrress;
+        erc1155Token = _erc1155TokenAddress;
     }
 
-    function wrap() external onlyOwner {
+    function wrap() external {
+
+    }
+
+    function unwrap() external {
 
     }
 }
