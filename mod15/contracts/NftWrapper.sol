@@ -12,8 +12,8 @@ contract NftWrapper is Ownable {
     IERC1155 immutable erc1155Token;
 
     constructor(address _erc721TokenAdrress, address _erc1155TokenAddress) {
-        erc721Token = _erc721TokenAdrress;
-        erc1155Token = _erc1155TokenAddress;
+        erc721Token = IERC721(_erc721TokenAdrress);
+        erc1155Token = IERC1155(_erc1155TokenAddress);
     }
 
     function wrap() external {
