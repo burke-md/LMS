@@ -12,9 +12,9 @@ contract Nft721 is ERC721, Ownable {
     bytes32 public constant REGULAR_ROOT = 
         0x8e0ef294185666298e0e9e164a24f423ef8b331f7bbb115d326a226af878862b;
 
-    // Recalculate BITMAP_ROOT TODO
+    // Recalculate BITMAP_ROOT TODO--?
     bytes32 public constant BITMAP_ROOT = 
-        0x8e0ef294185666298e0e9e164a24f423ef8b331f7bbb115d326a226af8780000;
+        0x08670ffe8d0e27af3ab713a78cf15d13cd5d74ea45d74aba63c3dda03288b2a2;
 //---------------------------------------------------------------------------------\\
 
     constructor()  ERC721("StandardToken", "STD") {
@@ -54,7 +54,7 @@ contract Nft721 is ERC721, Ownable {
         _safeMint(msg.sender, remainingTokens);
     }
 
-    function whiteListMintBitmap(bytes32[] calldata _proof, uint8 _ticket) external payable {
+    function whiteListMintBitmap(bytes32[] calldata _proof, uint256 _ticket) external payable {
         require(msg.value == PRICE, "Incorrect value sent.");
 
         /**
@@ -65,7 +65,7 @@ contract Nft721 is ERC721, Ownable {
         require(validateTicket(_ticket) == true, "Ticket could not be validated.");
 
         bytes32 leaf = keccak256((abi.encodePacked(msg.sender, _ticket)));
-        require(MerkleProof.verify(_proof, REGULAR_ROOT, leaf) == true, 
+        require(MerkleProof.verify(_proof, BITMAP_ROOT, leaf) == true, 
                     "Contract: Invalid proof.");
 
         decrementAvailableTokens();
