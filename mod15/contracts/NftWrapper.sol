@@ -4,23 +4,58 @@ pragma solidity 0.8.17;
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 contract NftWrapper is Ownable {
+    /**
+    * TODO
+    * make checked in unwrap
+    * rename success/data multiples
+    * Check bytes -> address casting (abi.decodeAddress?)
+    */
     
-    IERC721 immutable erc721Token;
-    IERC1155 immutable erc1155Token;
+    address immutable erc721Address;
+    address immutable erc1155Address;
 
     constructor(address _erc721TokenAdrress, address _erc1155TokenAddress) {
-        erc721Token = IERC721(_erc721TokenAdrress);
-        erc1155Token = IERC1155(_erc1155TokenAddress);
+        erc721Address = _erc721TokenAdrress;
+        erc1155Address = _erc1155TokenAddress;
     }
 
-    function wrap() external {
+    /**
+     * @notice User must first grant privileged to this contract before wrapping.
+      */
+    function wrap(uint256 _id) external {
+        // Check ownership
+        (bool success1, bytes memory data1) = erc721Address.call(
+            abi.encodeWithSignature("ownerOf(uint256)", _id));
 
+        // Cast return value bytes memory to address for assertion
+        address addr;
+        assembly {
+            addr := mload(add(data1,20))
+        } 
+        require(addr == msg.sender, 
+            "1155 Wrap: User does not own this token.");
+
+        // Transfer Nft to wrapper
+        (bool success2, bytes memory data2) = erc721Address.call(
+            abi.encodeWithSignature("safeTransferFrom(address,address,uint256)", msg.sender, address(this), _id));
+
+        // Mint 1155 to user
+        (bool success3, bytes memory data3) = erc1155Address.call(
+            abi.encodeWithSignature("wrapperMint(address,uint256)", msg.sender, _id));
+        // Confirm
+        require(success3, "Wrapper unable to mint 1155");
     }
 
-    function unwrap() external {
-
+    function unwrap(uint256 _id) external {
+        // Burn 1155 wrapper token
+        (bool success, bytes memory data) = erc1155Address.call(
+            abi.encodeWithSignature("wrapperBurn(address,uint256)", msg.sender, _id));
+        // Transfer 721 back to user
+        (bool success2, bytes memory data2) = erc721Address.call(
+            abi.encodeWithSignature("safeTransferFrom(address,address,uint256)", address(this), msg.sender, _id));
     }
+
+    //721 receiver
 }
