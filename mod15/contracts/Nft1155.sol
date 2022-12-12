@@ -5,16 +5,17 @@ pragma solidity 0.8.17;
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 
 contract Nft1155 is ERC1155 {
-
     address public immutable wrapperContract;
 
     constructor(address _wrapperContract) ERC1155("") {
         wrapperContract = _wrapperContract;
     }
 
-    modifier onlyWrapper () {
-        require(msg.sender == wrapperContract,
-            "Function can only be called from wrapper contact");
+    modifier onlyWrapper() {
+        require(
+            msg.sender == wrapperContract,
+            "Function can only be called from wrapper contact"
+        );
         _;
     }
 
