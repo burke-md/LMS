@@ -26,16 +26,12 @@ contract NftWrapper is Ownable {
      */
     function wrap(uint256 _id) external {
         // Check ownership
-        (, bytes memory data1) = erc721Address.call(
+        (, bytes memory ownerBytes) = erc721Address.call(
             abi.encodeWithSignature("ownerOf(uint256)", _id)
         );
 
-        // Cast return value bytes memory to address for assertion
-        address addr;
-        assembly {
-            addr := mload(add(data1, 20))
-        }
-        require(addr == msg.sender, "1155 Wrap: User does not own this token.");
+        address ownerAddr = abi.decode(ownerBytes, (address));
+        require(ownerAddr == msg.sender, "1155 Wrap: User does not own this token.");
 
         // Transfer Nft to wrapper
         erc721Address.call(
