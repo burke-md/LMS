@@ -10,7 +10,7 @@ contract NftWrapper is Ownable {
     * TODO
     * make checked in unwrap
     * rename success/data multiples
-    * Check bytes -> address casting (abi.decodeAddress?)
+    * Check bytes -> address casting (abi.decodeAddress?)address decoded = abi.decode(_addr, (address));    
     */
     
     address immutable erc721Address;
@@ -49,11 +49,18 @@ contract NftWrapper is Ownable {
     }
 
     function unwrap(uint256 _id) external {
+        (,bytes memory numTokens ) = erc1155Address.call(
+            abi.encodeWithSignature("balanceOf(address,uint256)", msg.sender, _id));
+        
+        uint256 decodedNumTokens = abi.decode(numTokens, (uint256));    
+
+        require(decodedNumTokens == 1, 
+            "Caller does not own wrapped token");
         // Burn 1155 wrapper token
-        (bool success, bytes memory data) = erc1155Address.call(
+        (bool isBurnt, ) = erc1155Address.call(
             abi.encodeWithSignature("wrapperBurn(address,uint256)", msg.sender, _id));
         // Transfer 721 back to user
-        (bool success2, bytes memory data2) = erc721Address.call(
+        (bool isTransfered, ) = erc721Address.call(
             abi.encodeWithSignature("safeTransferFrom(address,address,uint256)", address(this), msg.sender, _id));
     }
 
